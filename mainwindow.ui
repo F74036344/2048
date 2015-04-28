@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>319</width>
+    <height>172</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>2048</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="myresource.qrc">
+    <normaloff>:/images/resource/2048.png</normaloff>:/images/resource/2048.png</iconset>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item>
+     <layout class="QVBoxLayout" name="verticalLayout"/>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>319</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>Game</string>
+    </property>
+    <addaction name="actionNew_Game"/>
+    <addaction name="actionSettings"/>
+    <addaction name="actionCopyright_Information"/>
+    <addaction name="actionQuit_the_game"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="actionWhat_is_2048"/>
+    <addaction name="actionHow_to_play"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuHelp"/>
+  </widget>
+  <action name="actionSettings">
+   <property name="icon">
+    <iconset resource="myresource.qrc">
+     <normaloff>:/images/resource/setting_icon.png</normaloff>:/images/resource/setting_icon.png</iconset>
+   </property>
+   <property name="text">
+    <string>Settings...</string>
+   </property>
+  </action>
+  <action name="actionCopyright_Information">
+   <property name="icon">
+    <iconset resource="myresource.qrc">
+     <normaloff>:/images/resource/info.png</normaloff>:/images/resource/info.png</iconset>
+   </property>
+   <property name="text">
+    <string>Copyright Information...</string>
+   </property>
+  </action>
+  <action name="actionQuit_the_game">
+   <property name="icon">
+    <iconset resource="myresource.qrc">
+     <normaloff>:/images/resource/exit.png</normaloff>:/images/resource/exit.png</iconset>
+   </property>
+   <property name="text">
+    <string>Quit the game</string>
+   </property>
+  </action>
+  <action name="actionWhat_is_2048">
+   <property name="icon">
+    <iconset resource="myresource.qrc">
+     <normaloff>:/images/resource/Help1.png</normaloff>:/images/resource/Help1.png</iconset>
+   </property>
+   <property name="text">
+    <string>What is 2048?...</string>
+   </property>
+  </action>
+  <action name="actionHow_to_play">
+   <property name="icon">
+    <iconset resource="myresource.qrc">
+     <normaloff>:/images/resource/help2.png</normaloff>:/images/resource/help2.png</iconset>
+   </property>
+   <property name="text">
+    <string>How to play?...</string>
+   </property>
+  </action>
+  <action name="actionNew_Game">
+   <property name="icon">
+    <iconset resource="myresource.qrc">
+     <normaloff>:/images/resource/plus.png</normaloff>:/images/resource/plus.png</iconset>
+   </property>
+   <property name="text">
+    <string>New Game...</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources>
+  <include location="myresource.qrc"/>
+ </resources>
+ <connections/>
+</ui>
