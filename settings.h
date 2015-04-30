@@ -14,10 +14,14 @@ class settings : public QWidget
 public:
     explicit settings(QWidget *parent = 0);
     ~settings();
+    int settings_goal,settings_boardSizeIndex;
+
 
 private slots:
     void on_pushButton_Cancel_clicked();
 
+
+    void on_pushButton_Ok_clicked();
 
 private:
     Ui::settings *ui;

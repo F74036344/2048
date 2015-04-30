@@ -7,5 +7,16 @@
         <file>resource/info.png</file>
         <file>resource/2048.png</file>
         <file>resource/plus.png</file>
+        <file>resource/new_window.jpg</file>
+        <file>resource/new_window2.png</file>
+        <file>resource/restart.png</file>
+        <file>resource/ball.png</file>
+        <file>resource/bulb_s.png</file>
+        <file>resource/castle_s.png</file>
     </qresource>
+    <qresource prefix="/sounds"/>
+    <qresource prefix="/animation">
+        <file>resource/powered_by_Qt.gif</file>
+    </qresource>
+    <qresource prefix="/"/>
 </RCC>

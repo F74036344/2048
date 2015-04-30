@@ -1,4 +1,5 @@
 #include "settings.h"
+#include "mainwindow.h"
 #include "ui_settings.h"
 
 settings::settings(QWidget *parent) :
@@ -6,8 +7,7 @@ settings::settings(QWidget *parent) :
     ui(new Ui::settings)
 {
     ui->setupUi(this);
-    for(int i=4;i<=6;i++)
-        ui->comboBox->addItem(QString::number(i)+"x"+QString::number(i)+"("+QString::number(i*i)+")");
+
 }
 
 settings::~settings()
@@ -18,7 +18,13 @@ settings::~settings()
 void settings::on_pushButton_Cancel_clicked()
 {
 
-
-
-
+    this->close();
 }
+
+void settings::on_pushButton_Ok_clicked()
+{
+
+        this->close();
+}
+
+

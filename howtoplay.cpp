@@ -7,6 +7,8 @@ howtoplay::howtoplay(QWidget *parent) :
     ui(new Ui::howtoplay)
 {
     ui->setupUi(this);
+    QPixmap pic_castle(":/images/resource/castle_s.png");
+    ui->label_pic->setPixmap(pic_castle);
 }
 
 howtoplay::~howtoplay()
@@ -19,3 +21,7 @@ void howtoplay::on_pushButton_dKnow_clicked()
     QMessageBox::information(this,"(￣▽￣)~*","Cheer up!");
 
 }
+
+
+
+

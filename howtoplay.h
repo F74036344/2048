@@ -1,6 +1,8 @@
 #ifndef HOWTOPLAY_H
 #define HOWTOPLAY_H
 
+#include <QtCore>
+#include <QtGui>
 #include <QWidget>
 
 namespace Ui {

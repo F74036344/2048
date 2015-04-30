@@ -1,3 +1,4 @@
+
 #include "copyrightinformation.h"
 #include "ui_copyrightinformation.h"
 
@@ -12,3 +13,4 @@ copyrightInformation::~copyrightInformation()
 {
     delete ui;
 }
+

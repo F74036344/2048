@@ -18,7 +18,7 @@
     <rect>
      <x>20</x>
      <y>70</y>
-     <width>331</width>
+     <width>361</width>
      <height>181</height>
     </rect>
    </property>
@@ -29,7 +29,7 @@ p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'PMingLiU'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;1.Use your &lt;/span&gt;&lt;span style=&quot; font-size:11pt; font-weight:600;&quot;&gt;arrow keys&lt;/span&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; or &lt;/span&gt;&lt;span style=&quot; font-size:11pt; font-weight:600;&quot;&gt;W S D A&lt;/span&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; to &lt;/span&gt;&lt;span style=&quot; font-size:11pt; font-weight:600;&quot;&gt;move&lt;/span&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; the tiles. &lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;2.When two tiles with &lt;/span&gt;&lt;span style=&quot; font-size:14pt; font-weight:600;&quot;&gt;the same number&lt;/span&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; touch, they merge into one tile with same number they summed to one !&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;3.You can change settings in &amp;quot;&lt;/span&gt;&lt;span style=&quot; font-size:11pt; font-weight:600;&quot;&gt;Game-&amp;gt;Settings&lt;/span&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;&amp;quot;. &lt;/span&gt;&lt;span style=&quot; font-size:14pt; font-weight:600;&quot;&gt;Try hard to achieve the GOAL(๑^o^๑)!&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;3.You can change settings in &amp;quot;&lt;/span&gt;&lt;span style=&quot; font-size:11pt; font-weight:600;&quot;&gt;Game-&amp;gt;Settings&lt;/span&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;&amp;quot;. &lt;/span&gt;&lt;span style=&quot; font-size:14pt; font-weight:600;&quot;&gt;Try your best to achieve the GOAL(๑^o^๑)!&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
   </widget>
   <widget class="QLabel" name="label">
@@ -45,7 +45,7 @@ p, li { white-space: pre-wrap; }
     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;How to play(◕‿◕)?&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>180</x>
@@ -70,6 +70,19 @@ p, li { white-space: pre-wrap; }
      </widget>
     </item>
    </layout>
+  </widget>
+  <widget class="QLabel" name="label_pic">
+   <property name="geometry">
+    <rect>
+     <x>270</x>
+     <y>10</y>
+     <width>90</width>
+     <height>55</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
   </widget>
  </widget>
  <resources/>

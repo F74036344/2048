@@ -26,14 +26,14 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>
-        <widget class="QRadioButton" name="radioButton_128">
+        <widget class="QRadioButton" name="radioButton_1">
          <property name="text">
           <string>128</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QRadioButton" name="radioButton_256">
+        <widget class="QRadioButton" name="radioButton_2">
          <property name="text">
           <string>256</string>
          </property>
@@ -44,14 +44,14 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_3">
        <item>
-        <widget class="QRadioButton" name="radioButton_512">
+        <widget class="QRadioButton" name="radioButton_3">
          <property name="text">
           <string>512</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QRadioButton" name="radioButton_1024">
+        <widget class="QRadioButton" name="radioButton_4">
          <property name="text">
           <string>1024</string>
          </property>
@@ -62,7 +62,7 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_4">
        <item>
-        <widget class="QRadioButton" name="radioButton_2048">
+        <widget class="QRadioButton" name="radioButton_5">
          <property name="text">
           <string>2048</string>
          </property>
@@ -72,7 +72,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QRadioButton" name="radioButton_4096">
+        <widget class="QRadioButton" name="radioButton_6">
          <property name="text">
           <string>4096</string>
          </property>
@@ -161,22 +161,5 @@
   <zorder></zorder>
  </widget>
  <resources/>
- <connections>
-  <connection>
-   <sender>pushButton_Ok</sender>
-   <signal>clicked()</signal>
-   <receiver>settings</receiver>
-   <slot>close()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>201</x>
-     <y>160</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>236</x>
-     <y>134</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>
