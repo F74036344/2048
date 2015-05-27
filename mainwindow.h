@@ -4,11 +4,20 @@
 #include <QMainWindow>
 #include <QtCore>
 #include <QtGui>
+#include <QMediaPlayer>
+
+//include windows
 #include "cusbutton.h"
 #include "settings.h"
 #include "copyrightinformation.h"
 #include "whatis2048.h"
 #include "howtoplay.h"
+
+//include scenes
+#include "gameview.h"
+//include sources
+#include "sound.h"
+#include "data.h"
 
 namespace Ui {
 class MainWindow;
@@ -24,8 +33,12 @@ public slots:
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+    Sound *sound;
+    Data *data;
+    GameView *gameview;
 
-private slots:
+
+public slots:
     void on_actionCopyright_Information_triggered();
 
     void on_actionSettings_triggered();
@@ -44,13 +57,19 @@ private slots:
 
     void on_actionNew_Game_2_triggered();
 
+    void on_pushButton_gameStart_clicked();
+
+    void on_pushButton_quitGame_clicked();
+
+    void on_pushButton_settings_clicked();
+
 private:
-    QTimer *timer;
+    QTimer *timer,*sound_timer;
     Ui::MainWindow *ui;
-    QGraphicsScene *scene;
+    QGraphicsScene *mScene;
     CusButton *mybutton;
 
-    int settings_goal,settings_boardSizeIndex;
+
 };
 
 #endif // MAINWINDOW_H

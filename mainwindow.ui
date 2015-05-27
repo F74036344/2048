@@ -47,6 +47,58 @@
      <string/>
     </property>
    </widget>
+   <widget class="QPushButton" name="pushButton_gameStart">
+    <property name="geometry">
+     <rect>
+      <x>170</x>
+      <y>100</y>
+      <width>111</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Game Start !</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_settings">
+    <property name="geometry">
+     <rect>
+      <x>180</x>
+      <y>160</y>
+      <width>91</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Settings</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_quitGame">
+    <property name="geometry">
+     <rect>
+      <x>180</x>
+      <y>200</y>
+      <width>91</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Quit the Game</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_logo">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>20</y>
+      <width>131</width>
+      <height>191</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt; font-weight:600;&quot;&gt;2x2x2&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt; font-weight:600;&quot;&gt;x2x2x2x2&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt; font-weight:600;&quot;&gt;x2x2x2x2&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:36pt; font-weight:600;&quot;&gt;=2048&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -124,10 +176,19 @@
   <action name="actionNew_Game_2">
    <property name="icon">
     <iconset resource="myresource.qrc">
+     <normaloff>:/images/resource/restart.png</normaloff>:/images/resource/restart.png</iconset>
+   </property>
+   <property name="text">
+    <string>Reopen the game</string>
+   </property>
+  </action>
+  <action name="actionNew_Game">
+   <property name="icon">
+    <iconset resource="myresource.qrc">
      <normaloff>:/images/resource/plus.png</normaloff>:/images/resource/plus.png</iconset>
    </property>
    <property name="text">
-    <string>New Game...</string>
+    <string>New Game</string>
    </property>
   </action>
  </widget>

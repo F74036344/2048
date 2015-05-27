@@ -2,16 +2,28 @@
 #include <QtCore>
 #include <QMessageBox>
 #include <QDialog>
-#include <QMovie>
-#include <QLabel>
+#include <QMovie>           //Used to hold video data
+#include <QLabel>           //Used to display videos or pictures
+#include <QMediaPlayer>     //Used to play sound
 
-
+//include windows
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "settings.h"
 #include "copyrightinformation.h"
 #include "whatis2048.h"
 #include "howtoplay.h"
+#include "gameview.h"
+
+//include scenes
+
+
+
+//include sources
+#include "sound.h"
+#include "data.h"
+
+extern MainWindow *w; //For interactive acess of classes
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -19,11 +31,27 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    //Create a timer for later use
-    QTimer *timer=new QTimer;
+    //Pin the size of the mainwindow
+    this->setFixedSize(320,280);
+
+    //Hide some widgets that didn't wnat to be seen
+    ui->label_logo->lower();
+    ui->pushButton_gameStart->lower();
+    ui->pushButton_settings->lower();
+    ui->pushButton_quitGame->lower();
+
+    //Initialize sound object
+    sound = new Sound;
+
+    //Initialize data object
+    data = new Data;
+
+    //Create timers for later use
+    timer = new QTimer;
+    sound_timer = new QTimer;
 
     //play welcome animation
-    QMovie *welcomeAnimation = new QMovie(":/animation/resource/powered_by_Qt.gif");
+    QMovie *welcomeAnimation = new QMovie(QString(":/animation/resource/powered_by_Qt.gif"));
     ui->menuBar->setEnabled(false);
     ui->pushButton_skip->raise();
     ui->label_displayBeginAnimation->setMovie(welcomeAnimation);
@@ -38,14 +66,13 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(timer,SIGNAL(timeout()),ui->label_displayBeginAnimation,SLOT(close()));
     connect(timer,SIGNAL(timeout()),ui->pushButton_skip,SLOT(close()));
     connect(timer,SIGNAL(timeout()),welcomeAnimation,SLOT(deleteLater()));
-
     //When timeout, enable the menuBar
     connect(timer,SIGNAL(timeout()),this,SLOT(set_menuBar_enable()));
-    //When ... , execute the welcome_form() to show welcome message.
-    connect(ui->pushButton_skip,SIGNAL(destroyed()),this,SLOT(welcome_form()));
-
     //When timeout, stop the timer to prevent timeout signal emits continuous.
     connect(timer,SIGNAL(timeout()),timer,SLOT(stop()));
+
+    //When pushButton_skip is destroyed , execute the welcome_form() to show welcome message.
+    connect(ui->pushButton_skip,SIGNAL(destroyed()),this,SLOT(welcome_form()));
 
 
 }
@@ -59,6 +86,8 @@ MainWindow::~MainWindow()
 
 void MainWindow::welcome_form()
 {
+    //Execute the menuscene to show the menu.
+    sound->soundPlay(sound->welcomeMusic);
     QMessageBox::information(this,"Welcome","Welcome to 2048~");
 }
 
@@ -67,16 +96,29 @@ void MainWindow::set_menuBar_enable()
      ui->menuBar->setEnabled(true);
 }
 
+
+
+
+
+
+//slots function START
 void MainWindow::on_actionCopyright_Information_triggered()
 {
     copyrightInformation *cpinfo = new copyrightInformation;
+
+    //setWindowModality to prevent the mainwindow from being closed
+    cpinfo->setWindowModality(Qt::ApplicationModal);
     cpinfo->show();
     cpinfo->setAttribute(Qt::WA_DeleteOnClose);
+    //set mainwindow hide
 }
 
 void MainWindow::on_actionSettings_triggered()
 {
     settings *set = new settings;
+
+    //setWindowModality to prevent the mainwindow from being closed
+    set->setWindowModality(Qt::ApplicationModal);
     set->show();
     set->setAttribute(Qt::WA_DeleteOnClose);
 }
@@ -84,10 +126,11 @@ void MainWindow::on_actionSettings_triggered()
 void MainWindow::on_actionQuit_the_game_triggered()
 {
     QMessageBox::StandardButton reply;
+    sound->soundPlay(sound->warningAlert);
     reply = QMessageBox::question(this,"Quit request","Do you really want to quit?",
                           QMessageBox::Yes | QMessageBox::No);
     if(reply==QMessageBox::Yes)
-        this->close();
+        delete this;
 
 }
 
@@ -95,17 +138,24 @@ void MainWindow::on_actionQuit_the_game_triggered()
 void MainWindow::on_actionWhat_is_2048_triggered()
 {
     whatis2048 *wh2048 = new whatis2048;
+
+    //setWindowModality to prevent the mainwindow from being closed
+    wh2048->setWindowModality(Qt::ApplicationModal);
     wh2048->show();
     wh2048->setAttribute(Qt::WA_DeleteOnClose);
+    connect(wh2048,SIGNAL(destroyed()),w,SLOT(show()));
 }
 
 void MainWindow::on_actionHow_to_play_triggered()
 {
     howtoplay *htplay = new howtoplay;
+
+    //setWindowModality to prevent the mainwindow from being closed
+    htplay->setWindowModality(Qt::ApplicationModal);
     htplay->show();
     htplay->setAttribute(Qt::WA_DeleteOnClose);
-}
 
+}
 void MainWindow::on_pushButton_skip_clicked()
 {
     ui->label_displayBeginAnimation->close();
@@ -116,13 +166,50 @@ void MainWindow::on_pushButton_skip_clicked()
 void MainWindow::on_actionNew_Game_2_triggered()
 {
     QMessageBox::StandardButton reply;
+    sound->soundPlay(sound->warningAlert);
     reply = QMessageBox::question(this,
-                                  "New Window Request",
-                                  "Open a new Game Window?\n"
-                                  "Current Window would be CLOSE!!",
+                                  "Restart",
+                                  "Reopen the Game ?",
                           QMessageBox::Yes | QMessageBox::No);
-    if(reply==QMessageBox::Yes)
+    if(reply == QMessageBox::Yes)
     {
-
+         MainWindow *wtmp;
+         wtmp = w;
+         w = new MainWindow;
+         w->show();
+         delete wtmp;
     }
 }
+
+void MainWindow::on_pushButton_gameStart_clicked()
+{
+      gameview = new GameView;
+      //setWindowModality to prevent the mainwindow from being closed
+      gameview->setWindowModality(Qt::ApplicationModal);
+      gameview->show();
+      gameview->setAttribute(Qt::WA_DeleteOnClose);
+}
+
+
+void MainWindow::on_pushButton_settings_clicked()
+{
+    settings *set = new settings;
+
+    //setWindowModality to prevent the mainwindow from being closed
+    set->setWindowModality(Qt::ApplicationModal);
+    set->show();
+    set->setAttribute(Qt::WA_DeleteOnClose);
+}
+
+
+
+void MainWindow::on_pushButton_quitGame_clicked()
+{
+    QMessageBox::StandardButton reply;
+    sound->soundPlay(sound->warningAlert);
+    reply = QMessageBox::question(this,"Quit request","Do you really want to quit?",
+                          QMessageBox::Yes | QMessageBox::No);
+    if(reply==QMessageBox::Yes)
+        delete this;
+}
+//slot functions END

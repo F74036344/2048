@@ -5,6 +5,7 @@
 #include <QtGui>
 #include <QWidget>
 
+
 namespace Ui {
 class howtoplay;
 }

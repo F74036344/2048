@@ -13,8 +13,20 @@
         <file>resource/ball.png</file>
         <file>resource/bulb_s.png</file>
         <file>resource/castle_s.png</file>
+        <file>resource/skeleton.jpg</file>
     </qresource>
-    <qresource prefix="/sounds"/>
+    <qresource prefix="/sounds">
+        <file>resource/game_start.wav</file>
+        <file>resource/welcome.wav</file>
+        <file>resource/menu_music.mp3</file>
+        <file>resource/warning.wav</file>
+        <file>resource/move.wav</file>
+        <file>resource/move2.wav</file>
+        <file>resource/gameOver.mp3</file>
+        <file>resource/gameview_music.mp3</file>
+        <file>resource/gameview_musicHurry.mp3</file>
+        <file>resource/gameWin.mp3</file>
+    </qresource>
     <qresource prefix="/animation">
         <file>resource/powered_by_Qt.gif</file>
     </qresource>

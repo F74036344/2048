@@ -19,20 +19,29 @@ SOURCES += main.cpp\
     copyrightinformation.cpp \
     settings.cpp \
     howtoplay.cpp \
-    whatis2048.cpp
+    whatis2048.cpp \
+    sound.cpp \
+    data.cpp \
+    tile.cpp \
+    gameview.cpp
 
 HEADERS  += mainwindow.h \
     copyrightinformation.h \
     settings.h \
     howtoplay.h \
-    whatis2048.h
+    whatis2048.h \
+    sound.h \
+    data.h \
+    tile.h \
+    gameview.h
 
 FORMS    += mainwindow.ui \
     dialog.ui \
     copyrightinformation.ui \
     settings.ui \
     howtoplay.ui \
-    whatis2048.ui
+    whatis2048.ui \
+    gameview.ui
 
 RESOURCES += \
     myresource.qrc
