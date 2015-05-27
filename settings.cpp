@@ -11,12 +11,12 @@ settings::settings(QWidget *parent) :
     ui->setupUi(this);
     //Add options into comboBox and comboBox_tileGenerateAmount
     for(int i=0;i<3;i++)
-        ui->comboBox->addItem(QString(QString::number(i+4)+"x"+QString::number(i+4)));
+        ui->comboBox_boardEdgeSizeValue->addItem(QString(QString::number(i+4)+"x"+QString::number(i+4)));
     for(int i=0;i<3;i++)
         ui->comboBox_tileGenerateAmount->addItem(QString(QString::number(i+1)));
 
     //Read comboBox imformation from data
-    ui->comboBox->setCurrentIndex(w->data->getBoardEdgeSizeIndexValue());
+    ui->comboBox_boardEdgeSizeValue->setCurrentIndex(w->data->getBoardEdgeSizeIndexValue());
 
     //Read comboBox_tileGenerateAmount imformation from data
     ui->comboBox_tileGenerateAmount->setCurrentIndex(w->data->getTileGenerateAmountIndex());
@@ -68,7 +68,7 @@ void settings::on_pushButton_Cancel_clicked()
 void settings::on_pushButton_Ok_clicked()
 {
     //Save boardEdgeSizeIndexValue to data
-    w->data->setBoardEdgeSizeIndexValue(ui->comboBox->currentIndex());
+    w->data->setBoardEdgeSizeIndexValue(ui->comboBox_boardEdgeSizeValue->currentIndex());
     //Save tileGenerateAmountIndex to data
     w->data->setTileGenerateAmountIndex(ui->comboBox_tileGenerateAmount->currentIndex());
 

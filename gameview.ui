@@ -69,7 +69,7 @@
     </rect>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_goBackToMenu">
+  <widget class="QPushButton" name="pushButton_restartTheGame">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -79,7 +79,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Go back to Menu</string>
+    <string>Restart the Game</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_goalText">
@@ -142,6 +142,19 @@
      <width>30</width>
      <height>30</height>
     </size>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_goBackToMenu">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>360</y>
+     <width>101</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Go back to Menu</string>
    </property>
   </widget>
  </widget>

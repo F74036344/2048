@@ -67,10 +67,11 @@ protected:
 
 private slots:
 
-    void on_pushButton_goBackToMenu_clicked();
-
-
     void on_pushButton_IDontWantToPlay_clicked();
+
+    void on_pushButton_restartTheGame_clicked();
+
+    void on_pushButton_goBackToMenu_clicked();
 
 private:
 

@@ -33,14 +33,18 @@ GameView::GameView(QWidget *parent) :
     goal = w->data->getGoalValue();
     setFixedSize(gap + controlPanelWidth + ((gap+tileEdgeLength) * (w->data->getBoardEdgeSizeValue())+gap),
                        2 * gap + ((gap+tileEdgeLength)*(w->data->getBoardEdgeSizeValue())+gap));
-    ui->pushButton_goBackToMenu->setGeometry(8,
-                                             gap+(w->data->getBoardEdgeSizeValue()-1)*(tileEdgeLength+gap)+tileEdgeLength/2,
-                                             controlPanelWidth-8-8,
-                                             30);
+    ui->pushButton_restartTheGame->setGeometry(-30,
+                                             -30,
+                                             0,
+                                             0);
     ui->pushButton_IDontWantToPlay->setGeometry(8,
-                                             gap+(w->data->getBoardEdgeSizeValue()-2)*(tileEdgeLength+gap)+tileEdgeLength/2+20,
+                                             gap+(w->data->getBoardEdgeSizeValue()-2)*(tileEdgeLength+gap)+tileEdgeLength/2+35,
                                              controlPanelWidth-8-8,
                                              50);
+    ui->pushButton_goBackToMenu->setGeometry(8,
+                                             gap+(w->data->getBoardEdgeSizeValue()-1)*(tileEdgeLength+gap)+tileEdgeLength/2+15,
+                                             controlPanelWidth-8-8,
+                                             30);
     setTileColor(w->data->getTileColor());
 
     score = 0;
@@ -230,13 +234,14 @@ void GameView::emitMoveTileSignalToAll(QString motion)
 
 
 void GameView::moveTile(int index,QString motion) //step 2:move tiles
+//this function moves a tile only, so moving all the tiles need to call this function several times
 {
     if((*(tile+index)) == NULL)
         ;   //Do nothing
     else
     {
         int row,col,currentRow,currentCol;
-        int step=0;
+        int step = 0;
         if(motion == QString("Up"))
         {
                     qDebug() << "motion Up received";
@@ -244,7 +249,7 @@ void GameView::moveTile(int index,QString motion) //step 2:move tiles
             col = index%boardEdgeSize;
             currentRow = row;
             currentCol = col;
-            //由下往上檢查
+            //由該tile往上檢查
             while(1)
             {
                 row--;
@@ -276,7 +281,7 @@ void GameView::moveTile(int index,QString motion) //step 2:move tiles
                     (*(currentValueOfTile+currentCol+(currentRow-step)*boardEdgeSize)) += (*(currentValueOfTile+currentCol+currentRow*boardEdgeSize));
                     tileDestructor(currentCol+currentRow*boardEdgeSize);
                     tileCreator(currentCol+(currentRow-step)*boardEdgeSize);
-                    scoreAddAndShow(*(currentValueOfTile+currentCol+currentRow*boardEdgeSize));
+                    scoreAddAndShow(*(currentValueOfTile+currentCol+(currentRow-step)*boardEdgeSize));
                 }
             }
 
@@ -287,7 +292,7 @@ void GameView::moveTile(int index,QString motion) //step 2:move tiles
             col = index%boardEdgeSize;
             currentRow = row;
             currentCol = col;
-            //由上往下檢查
+            //由該tile往下檢查
             while(1)
             {
                 row++;
@@ -319,7 +324,7 @@ void GameView::moveTile(int index,QString motion) //step 2:move tiles
                     (*(currentValueOfTile+currentCol+(currentRow+step)*boardEdgeSize)) += (*(currentValueOfTile+currentCol+currentRow*boardEdgeSize));
                     tileCreator(currentCol+(currentRow+step)*boardEdgeSize);
                     tileDestructor(currentCol+currentRow*boardEdgeSize);
-                    scoreAddAndShow(*currentValueOfTile+currentCol+currentRow*boardEdgeSize);
+                    scoreAddAndShow(*(currentValueOfTile+currentCol+(currentRow+step)*boardEdgeSize));
                 }
             }
 
@@ -330,7 +335,7 @@ void GameView::moveTile(int index,QString motion) //step 2:move tiles
             col = index%boardEdgeSize;
             currentRow = row;
             currentCol = col;
-            //由右往左檢查
+            //由該tile往左檢查
 
             while(1)
             {
@@ -363,7 +368,7 @@ void GameView::moveTile(int index,QString motion) //step 2:move tiles
                     (*(currentValueOfTile+(currentCol-step)+currentRow*boardEdgeSize)) += (*(currentValueOfTile+currentCol+currentRow*boardEdgeSize));
                     tileCreator((currentCol-step)+currentRow*boardEdgeSize);
                     tileDestructor(currentCol+currentRow*boardEdgeSize);
-                    scoreAddAndShow(*currentValueOfTile+currentCol+currentRow*boardEdgeSize);
+                    scoreAddAndShow(*(currentValueOfTile+(currentCol-step)+currentRow*boardEdgeSize));
                 }
             }
 
@@ -374,7 +379,7 @@ void GameView::moveTile(int index,QString motion) //step 2:move tiles
             col = index%boardEdgeSize;
             currentRow = row;
             currentCol = col;
-            //由左往右檢查
+            //由該tile往右檢查
             while(1)
             {
                 col++;
@@ -406,7 +411,7 @@ void GameView::moveTile(int index,QString motion) //step 2:move tiles
                     (*(currentValueOfTile+(currentCol+step)+currentRow*boardEdgeSize)) += (*(currentValueOfTile+currentCol+currentRow*boardEdgeSize));
                     tileCreator((currentCol+step)+currentRow*boardEdgeSize);
                     tileDestructor(currentCol+currentRow*boardEdgeSize);
-                    scoreAddAndShow(*currentValueOfTile+currentCol+currentRow*boardEdgeSize);
+                    scoreAddAndShow(*(currentValueOfTile+(currentCol+step)+currentRow*boardEdgeSize));
                 }
             }
 
@@ -435,7 +440,7 @@ void GameView::generateTile()   //step 3
     //開始產生*tile(開始抽籤以決定要產生的位置
     //先設定要產生幾個*tile
     //從data讀取每一步要產生的*tile的個數
-    int tileAmountToGenerate=(w->data->getTileGenerateAmount());
+    int tileAmountToGenerate = (w->data->getTileGenerateAmount());
     for(int i=0;i<tileAmountToGenerate;i++)
     {
         if(total_index_available_amount <= 0)
@@ -482,16 +487,9 @@ void GameView::checkIfAnyTileReachGoal()    //step 4
 
 void GameView::checkIfAnyTileIsMovable()
 {
-    //第一階段開始檢查是否有available的*tile
-   bool allTileIsUnavailable=true;
-       for(int k=0;k<power(boardEdgeSize,2);k++)
-           if(*(tile+k) == NULL)
-               allTileIsUnavailable=false;
-   if(allTileIsUnavailable)	//如果沒有空的*tile，則進入第二階段
-   //第二階段:開始檢查是否所有*tile皆已不能動
-   {
+    //檢查是否所有*tile皆已不能動
        bool allTileCanNotMove = true;
-       //向右及向下檢查是否有1.Available的tile 2.同樣value的tile存在
+       //向右及向下檢查是否有1.空的tile 2.同樣value的tile存在
        //有的話就代表tile還可以移動，allTileCanNotMove設為false
        for(int row=0;row<boardEdgeSize;row++)
            for(int col=0;col<boardEdgeSize;col++)
@@ -530,7 +528,7 @@ void GameView::checkIfAnyTileIsMovable()
            gameOver();
        }
        //如果還有*tile能動的話，則沒有動作退出此函式，等待下一次的keyPressEvent
-    }
+
             qDebug() << "Step5:checkIfAnyTileMovable done";
 }
 
@@ -636,6 +634,7 @@ int GameView::power(int a, int n)
 
 void GameView::gameOver()
 {
+    w->sound->soundPlay_stop();
     w->sound->soundBgMusicPlay_stop();
     w->sound->soundPlay(w->sound->gameOverMusic);
     gameEnd = true;
@@ -644,46 +643,58 @@ void GameView::gameOver()
     font.setPointSize(28);
     font.setBold(true);
     gameStatusLabel.setFont(font);
-    gameStatusLabel.setStyleSheet("QLabel{background-color : QColor(0,0,0,50) ; color : red}");
+    gameStatusLabel.setStyleSheet("QLabel{background-color : QColor(0,0,0,70) ; color : red}");
 
     gameStatusBackground.setPen(QPen(QColor(30,30,30,50),1));
     gameStatusBackground.setBrush(QColor(30,30,30,50));
 
     gameAreaScene->addItem(&gameStatusBackground);
     gameAreaScene->addWidget(&gameStatusLabel);
-
+    ui->pushButton_restartTheGame->setGeometry(controlPanelWidth+gap+(gap+tileEdgeLength)*(boardEdgeSize/2.0-0.75),
+                                               gap+(gap+tileEdgeLength)*(boardEdgeSize/2.0+0.8),
+                                               gap+tileEdgeLength*1.5,
+                                               40);
 }
 
 void GameView::gameWin()
 {
     w->sound->soundBgMusicPlay_stop();
-    w->sound->soundPlay(w->sound->gameOverMusic);
+    w->sound->soundPlay(w->sound->gameWinMusic);
     gameEnd = true;
     gameStatusLabel.setText("You Win The Game\n\\^o^/");
     QFont font;
     font.setPointSize(28);
     font.setBold(true);
     gameStatusLabel.setFont(font);
-    gameStatusLabel.setStyleSheet("QLabel{background-color : QColor(0,0,0,50) ; color : green}");
+    gameStatusLabel.setStyleSheet("QLabel{background-color : QColor(0,0,0,50) ; color : white}");
 
     gameAreaScene->addItem(&gameStatusBackground);
     gameAreaScene->addWidget(&gameStatusLabel);
+    ui->pushButton_restartTheGame->setGeometry(controlPanelWidth+gap+(gap+tileEdgeLength)*(boardEdgeSize/2.0-0.75),
+                                               gap+(gap+tileEdgeLength)*(boardEdgeSize/2.0+0.8),
+                                               gap+tileEdgeLength*1.5,
+                                               40);
 }
 
 
+void GameView::on_pushButton_IDontWantToPlay_clicked()
+{
+    gameOver();
+}
+
+void GameView::on_pushButton_restartTheGame_clicked()
+{
+    w->sound->soundPlay_stop();
+    w->on_pushButton_gameRestart_clicked();
+}
 
 void GameView::on_pushButton_goBackToMenu_clicked()
 {
     QMessageBox::StandardButton reply;
     w->sound->soundPlay(w->sound->messageAlert);
-    reply = QMessageBox::question(this,"Go back to Menu","Do you really want to return to Menu?\n"
+    reply = QMessageBox::question(this,"Return to Menu","Do you really want to return to the Menu?\n"
                                   "Current game status would be DISCARDED!!",
                           QMessageBox::Yes | QMessageBox::No);
     if(reply == QMessageBox::Yes)
-        delete this;
-}
-
-void GameView::on_pushButton_IDontWantToPlay_clicked()
-{
-    gameOver();
+        this->close();
 }

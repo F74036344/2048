@@ -26,9 +26,6 @@ class MainWindow;
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
-public slots:
-
-
 
 public:
     explicit MainWindow(QWidget *parent = 0);
@@ -58,13 +55,14 @@ public slots:
     void on_actionNew_Game_2_triggered();
 
     void on_pushButton_gameStart_clicked();
+    void on_pushButton_gameRestart_clicked();
 
     void on_pushButton_quitGame_clicked();
 
     void on_pushButton_settings_clicked();
 
 private:
-    QTimer *timer,*sound_timer;
+    QTimer *timer;
     Ui::MainWindow *ui;
     QGraphicsScene *mScene;
     CusButton *mybutton;

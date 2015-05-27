@@ -25,6 +25,7 @@ public:
     QMediaPlayer *gameviewBackgroundMusicHurry; //length: 34500
 
     void soundPlay(QMediaPlayer*);
+    void soundPlay_stop();
     void soundBgMusicPlay(QMediaPlayer*,int soundTimeLength);
     void soundBgMusicPlay_stop();
 public slots:
@@ -32,6 +33,7 @@ public slots:
 
 private:
     QMediaPlayer *soundBgMusicPlayer;
+    QMediaPlayer *soundPlayer;
     QTimer timer,timerForBackgroundMusic;
 
 };

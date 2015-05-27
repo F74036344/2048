@@ -36,18 +36,24 @@ Sound::~Sound()
 
 }
 
-void Sound::soundPlay(QMediaPlayer *soundplayer)
+void Sound::soundPlay(QMediaPlayer *sdplayer)
 {
-    if(soundplayer->state() == QMediaPlayer::PlayingState)
-        soundplayer->setPosition(0);
-    else if(soundplayer->state() == QMediaPlayer::StoppedState
-            ||soundplayer->state() == QMediaPlayer::PausedState)
-        soundplayer->play();
+    soundPlayer = sdplayer;
+    if(soundPlayer->state() == QMediaPlayer::PlayingState)
+        soundPlayer->setPosition(0);
+    else if(soundPlayer->state() == QMediaPlayer::StoppedState
+            ||soundPlayer->state() == QMediaPlayer::PausedState)
+        soundPlayer->play();
 }
 
-void Sound::soundBgMusicPlay(QMediaPlayer *soundplayer, int soundTimeLength)
+void Sound::soundPlay_stop()
 {
-    soundBgMusicPlayer = soundplayer;
+    soundPlayer->stop();
+}
+
+void Sound::soundBgMusicPlay(QMediaPlayer *sdplayer, int soundTimeLength)
+{
+    soundBgMusicPlayer = sdplayer;
     if(soundBgMusicPlayer->state() == QMediaPlayer::PlayingState)
         soundBgMusicPlayer->setPosition(0);
     else if(soundBgMusicPlayer->state() == QMediaPlayer::StoppedState
@@ -67,7 +73,8 @@ void Sound::soundBgMusicPlay_stop()
 
 void Sound::soundBgMusicPlay_replay()
 {
-    soundBgMusicPlayer->setPosition(0);
+    soundBgMusicPlayer->stop();
+    soundBgMusicPlayer->play();
 }
 
 

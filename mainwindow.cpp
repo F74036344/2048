@@ -34,6 +34,9 @@ MainWindow::MainWindow(QWidget *parent) :
     //Pin the size of the mainwindow
     this->setFixedSize(320,280);
 
+    //Initialize gameview
+    gameview = NULL;
+
     //Hide some widgets that didn't wnat to be seen
     ui->label_logo->lower();
     ui->pushButton_gameStart->lower();
@@ -48,7 +51,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //Create timers for later use
     timer = new QTimer;
-    sound_timer = new QTimer;
 
     //play welcome animation
     QMovie *welcomeAnimation = new QMovie(QString(":/animation/resource/powered_by_Qt.gif"));
@@ -183,6 +185,16 @@ void MainWindow::on_actionNew_Game_2_triggered()
 
 void MainWindow::on_pushButton_gameStart_clicked()
 {
+      gameview = new GameView;
+      //setWindowModality to prevent the mainwindow from being closed
+      gameview->setWindowModality(Qt::ApplicationModal);
+      gameview->show();
+      gameview->setAttribute(Qt::WA_DeleteOnClose);
+}
+
+void MainWindow::on_pushButton_gameRestart_clicked()
+{
+      delete gameview;
       gameview = new GameView;
       //setWindowModality to prevent the mainwindow from being closed
       gameview->setWindowModality(Qt::ApplicationModal);
