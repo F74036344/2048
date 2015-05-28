@@ -8,6 +8,8 @@ Data::Data()
     setWhichGoalButtonChecked(5);
     setTileGenerateAmountIndex(0);
     setWhichTileColorButtonChecked(QString("default"));
+    setTimeLimitIsChecked(false);
+    setTimeLimitValue(120);
 }
 
 Data::~Data()
@@ -45,6 +47,16 @@ int Data::getTileGenerateAmount()
 int Data::getTileGenerateAmountIndex()
 {
     return tileGenerateAmountIndex;
+}
+
+bool Data::isTimeLimitChecked()
+{
+    return timeLimitIsChecked;
+}
+
+int Data::getTimeLimitValue()
+{
+        return timeLimitValue;
 }
 
 QString Data::getWhichTileColorButtonChecked()
@@ -140,6 +152,16 @@ void Data::setTileGenerateAmountIndex(int value)
 void Data::setWhichTileColorButtonChecked(QString color)
 {
     whichTileColorButtonChecked = color;
+}
+
+void Data::setTimeLimitIsChecked(bool tof)
+{
+    timeLimitIsChecked = tof;
+}
+
+void Data::setTimeLimitValue(int value)
+{
+    timeLimitValue = value;
 }
 
 

@@ -49,6 +49,8 @@ public:
     void setTileColor(QColor);
     QColor getTileColor();
 
+    void setStopWatchValueAndShow(int);
+
     int getTileEdgeLengthValue();
     int getGapValue();
 
@@ -73,6 +75,12 @@ private slots:
 
     void on_pushButton_goBackToMenu_clicked();
 
+    void on_pushButton_quiet_clicked();
+
+    void on_pushButton_pause_clicked();
+
+    void oneTimeUnitPass();
+
 private:
 
     QGraphicsRectItem **tile;
@@ -81,12 +89,15 @@ private:
     Ui::GameView *ui;
     QGraphicsRectItem *rectBlock;
     QGraphicsRectItem gameAreaFrame;
-    QLabel gameStatusLabel;     QGraphicsRectItem gameStatusBackground;
+    QLabel gameStatusLabel;
     int controlPanelWidth,controlPanelHeight;
     int gameAreaPosX,gameAreaPosY;
     int boardEdgeSize;
     int goal;
-    bool gameEnd;
+    int timeLeft;   //in second
+    bool keyEventBlock;
+    bool isAnyTileMoved;
+    bool isBackgroundMusicOn,isGamePaused;
 
     //tile properties
     int tileEdgeLength,gameAreaEdgeLength,gap;
@@ -101,6 +112,8 @@ private:
     int moveTinyStepAmount,scaleTinyStepAmount,emergeTinyStepAmount;
 
     QTimer *timerForMove, *timerForScale, *timerForEmerge;
+    QTimer *timerForStopWatch;
+    int counterForStopWatch;
 };
 
 #endif // GAMEVIEW_H

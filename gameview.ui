@@ -23,8 +23,8 @@
   <widget class="QLabel" name="label_scoreText">
    <property name="geometry">
     <rect>
-     <x>0</x>
-     <y>50</y>
+     <x>10</x>
+     <y>20</y>
      <width>91</width>
      <height>31</height>
     </rect>
@@ -43,8 +43,8 @@
   <widget class="QLabel" name="label_scoreValue">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>80</y>
+     <x>30</x>
+     <y>50</y>
      <width>81</width>
      <height>41</height>
     </rect>
@@ -52,7 +52,7 @@
    <property name="font">
     <font>
      <family>Arial</family>
-     <pointsize>22</pointsize>
+     <pointsize>20</pointsize>
     </font>
    </property>
    <property name="text">
@@ -85,8 +85,8 @@
   <widget class="QLabel" name="label_goalText">
    <property name="geometry">
     <rect>
-     <x>0</x>
-     <y>150</y>
+     <x>20</x>
+     <y>90</y>
      <width>91</width>
      <height>31</height>
     </rect>
@@ -105,8 +105,8 @@
   <widget class="QLabel" name="label_goalValue">
    <property name="geometry">
     <rect>
-     <x>0</x>
-     <y>180</y>
+     <x>10</x>
+     <y>120</y>
      <width>101</width>
      <height>41</height>
     </rect>
@@ -114,7 +114,7 @@
    <property name="font">
     <font>
      <family>Arial</family>
-     <pointsize>22</pointsize>
+     <pointsize>20</pointsize>
     </font>
    </property>
    <property name="text">
@@ -135,12 +135,12 @@
    </property>
    <property name="icon">
     <iconset resource="myresource.qrc">
-     <normaloff>:/images/resource/skeleton.jpg</normaloff>:/images/resource/skeleton.jpg</iconset>
+     <normaloff>:/images/resource/bomb.jpg</normaloff>:/images/resource/bomb.jpg</iconset>
    </property>
    <property name="iconSize">
     <size>
-     <width>30</width>
-     <height>30</height>
+     <width>45</width>
+     <height>45</height>
     </size>
    </property>
   </widget>
@@ -155,6 +155,92 @@
    </property>
    <property name="text">
     <string>Go back to Menu</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_quiet">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>250</y>
+     <width>41</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="icon">
+    <iconset resource="myresource.qrc">
+     <normaloff>:/images/resource/speaker.png</normaloff>:/images/resource/speaker.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>30</width>
+     <height>30</height>
+    </size>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_pause">
+   <property name="geometry">
+    <rect>
+     <x>80</x>
+     <y>250</y>
+     <width>41</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="icon">
+    <iconset resource="myresource.qrc">
+     <normaloff>:/images/resource/pause.png</normaloff>:/images/resource/pause.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>30</width>
+     <height>30</height>
+    </size>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_timeText">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>160</y>
+     <width>71</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+     <pointsize>16</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; color:#00aa00;&quot;&gt;Time&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_timeValue">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>190</y>
+     <width>47</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+     <pointsize>20</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; color:#00aa00;&quot;&gt;∞&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
   </widget>
  </widget>

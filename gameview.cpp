@@ -17,9 +17,18 @@ GameView::GameView(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    w->sound->soundBgMusicPlay(w->sound->gameviewBackgroundMusic,76800);
+    timeLeft = w->data->getTimeLimitValue();
+    if(w->data->isTimeLimitChecked() && timeLeft<=20)
+    {
+            w->sound->soundBgMusicPlay(w->sound->gameviewBackgroundMusicHurry,34500);
+    }
+    else
+        w->sound->soundBgMusicPlay(w->sound->gameviewBackgroundMusic,76800);
 
-    gameEnd = false;
+    isBackgroundMusicOn = true;
+    isGamePaused = false;
+
+    keyEventBlock = false;
 
     //Initialize the control panel properties
     controlPanelWidth = 120;
@@ -33,18 +42,34 @@ GameView::GameView(QWidget *parent) :
     goal = w->data->getGoalValue();
     setFixedSize(gap + controlPanelWidth + ((gap+tileEdgeLength) * (w->data->getBoardEdgeSizeValue())+gap),
                        2 * gap + ((gap+tileEdgeLength)*(w->data->getBoardEdgeSizeValue())+gap));
+    ui->label_scoreText->setGeometry(0,0,controlPanelWidth,30);
+    ui->label_scoreValue->setGeometry(0,30,controlPanelWidth,30);
+    ui->label_goalText->setGeometry(0,70,controlPanelWidth,30);
+    ui->label_goalValue->setGeometry(0,100,controlPanelWidth,30);
+    ui->label_timeText->setGeometry(0,140,controlPanelWidth,30);
+    ui->label_timeValue->setGeometry(0,170,controlPanelWidth,30);
+
+
     ui->pushButton_restartTheGame->setGeometry(-30,
                                              -30,
                                              0,
                                              0);
     ui->pushButton_IDontWantToPlay->setGeometry(8,
-                                             gap+(w->data->getBoardEdgeSizeValue()-2)*(tileEdgeLength+gap)+tileEdgeLength/2+35,
+                                             gap+(w->data->getBoardEdgeSizeValue()-2)*(tileEdgeLength+gap)+tileEdgeLength/2+45,
                                              controlPanelWidth-8-8,
                                              50);
     ui->pushButton_goBackToMenu->setGeometry(8,
                                              gap+(w->data->getBoardEdgeSizeValue()-1)*(tileEdgeLength+gap)+tileEdgeLength/2+15,
                                              controlPanelWidth-8-8,
                                              30);
+    ui->pushButton_quiet->setGeometry(10,
+                                      gap+(w->data->getBoardEdgeSizeValue()-2)*(tileEdgeLength+gap)+tileEdgeLength/2,
+                                      40,
+                                      40);
+    ui->pushButton_pause->setGeometry(70,
+                                      gap+(w->data->getBoardEdgeSizeValue()-2)*(tileEdgeLength+gap)+tileEdgeLength/2,
+                                      40,
+                                      40);
     setTileColor(w->data->getTileColor());
 
     score = 0;
@@ -56,6 +81,22 @@ GameView::GameView(QWidget *parent) :
     ui->label_goalValue->setText(QString::number(w->data->getGoalValue()));
     ui->label_goalValue->setStyleSheet("QLabel{background-color : transparent ; color : red}");
     ui->label_goalValue->setAlignment(Qt::AlignCenter);
+
+    //Set stopwatch properties
+    timerForStopWatch = new QTimer;
+    if(w->data->isTimeLimitChecked())
+    {
+        setStopWatchValueAndShow(timeLeft);
+
+        counterForStopWatch = 0;
+        connect(timerForStopWatch,SIGNAL(timeout()),this,SLOT(oneTimeUnitPass()));
+        timerForStopWatch->start(50);
+    }
+    else
+        ui->label_timeValue->setText("∞");
+    ui->label_timeValue->setStyleSheet("QLabel{background-color : transparent ; color : green}");
+    ui->label_timeValue->setAlignment(Qt::AlignCenter);
+
 
     //**Set the properties for animation START
     tileIsActing = new bool[power(boardEdgeSize,2)];
@@ -113,11 +154,7 @@ GameView::GameView(QWidget *parent) :
     gameStatusLabel.setAlignment(Qt::AlignCenter);
     gameStatusLabel.setStyleSheet("QLabel{background-color : transparent ; color : transparent}");
 
-    gameStatusBackground.setRect(0,0,gameAreaEdgeLength,gameAreaEdgeLength);
-    gameStatusBackground.setPos(0,0);
-    gameStatusBackground.setBrush(Qt::transparent);
-    gameStatusBackground.setPen(QPen(Qt::transparent,0));
-    //The two objects above would be added to scene when gameOver() or gameWin() is called
+    //The object above would be added to scene later
 
     //Start to set rectBlock
     for(int row = 0;row<(w->data->getBoardEdgeSizeValue());row++)
@@ -162,6 +199,7 @@ GameView::~GameView()
     delete timerForMove;
     delete timerForScale;
     delete [] tileIsActing;
+    delete timerForStopWatch;
     //delete gameAreaScene;
 
 }
@@ -170,28 +208,24 @@ void GameView::keyPressEvent(QKeyEvent *event)  //step 1:receive key event from 
 {
     //會傳event的情況:  1.尚未gameEnd(gameOver or gameWin)
                     qDebug() << event->key()<<"Key detected";
-    if(!gameEnd)    //game尚未結束，則傳event
+    if(!keyEventBlock)    //game尚未結束，則傳event
     {
 
             if(event->key()==Qt::Key_Up||event->key()==Qt::Key_W)
             {
                 emitMoveTileSignalToAll(QString("Up"));
-                generateTile();
             }
             else if(event->key()==Qt::Key_Down||event->key()==Qt::Key_S)
             {
                 emitMoveTileSignalToAll(QString("Down"));
-                generateTile();
             }
             else if(event->key()==Qt::Key_Left||event->key()==Qt::Key_A)
             {
                 emitMoveTileSignalToAll(QString("Left"));
-                generateTile();
             }
             else if(event->key()==Qt::Key_Right||event->key()==Qt::Key_D)
             {
                 emitMoveTileSignalToAll(QString("Right"));
-                generateTile();
             }
 
 
@@ -199,6 +233,7 @@ void GameView::keyPressEvent(QKeyEvent *event)  //step 1:receive key event from 
 }
 void GameView::emitMoveTileSignalToAll(QString motion)
 {
+    isAnyTileMoved = false;
     if(motion == QString("Up"))
     {
         qDebug() << "motion Up detected";
@@ -227,6 +262,11 @@ void GameView::emitMoveTileSignalToAll(QString motion)
         for(int col=boardEdgeSize-1;col>=0;--col)
             for(int row=0;row<boardEdgeSize;++row)
                 moveTile(col+row*boardEdgeSize,motion);  //Would trigger function moveTile()
+    }
+
+    if(isAnyTileMoved)  //If any tile is moved, then generate tile;Otherwise do nothing
+    {
+        generateTile();
     }
 
 }
@@ -270,6 +310,7 @@ void GameView::moveTile(int index,QString motion) //step 2:move tiles
             }
             if(step>0)
             {
+                isAnyTileMoved = true;
                 if((*(tile+currentCol+(currentRow-step)*boardEdgeSize)) == NULL)
                 {
                     (*(currentValueOfTile+currentCol+(currentRow-step)*boardEdgeSize)) = (*(currentValueOfTile+currentCol+currentRow*boardEdgeSize));
@@ -313,6 +354,7 @@ void GameView::moveTile(int index,QString motion) //step 2:move tiles
             }
             if(step>0)
             {
+                isAnyTileMoved = true;
                 if((*(tile+currentCol+(currentRow+step)*boardEdgeSize)) == NULL)
                 {
                     (*(currentValueOfTile+currentCol+(currentRow+step)*boardEdgeSize)) = (*(currentValueOfTile+currentCol+currentRow*boardEdgeSize));
@@ -357,6 +399,7 @@ void GameView::moveTile(int index,QString motion) //step 2:move tiles
             }
             if(step>0)
             {
+                isAnyTileMoved = true;
                 if((*(tile+(currentCol-step)+currentRow*boardEdgeSize)) == NULL)
                 {
                     (*(currentValueOfTile+(currentCol-step)+currentRow*boardEdgeSize)) = (*(currentValueOfTile+currentCol+currentRow*boardEdgeSize));
@@ -400,6 +443,7 @@ void GameView::moveTile(int index,QString motion) //step 2:move tiles
             }
             if(step>0)
             {
+                isAnyTileMoved = true;
                 if((*(tile+(currentCol+step)+currentRow*boardEdgeSize) == NULL))
                 {
                     (*(currentValueOfTile+(currentCol+step)+currentRow*boardEdgeSize)) = (*(currentValueOfTile+currentCol+currentRow*boardEdgeSize));
@@ -549,7 +593,12 @@ void GameView::tileTextCreator(int index,int value)
     (*(label_demoValue+index))->setGeometry(gap+(gap+tileEdgeLength)*col,gap+(gap+tileEdgeLength)*row,tileEdgeLength,tileEdgeLength);
     (*(label_demoValue+index))->setText(QString::number(value));
     QFont font;
-    font.setPointSize(32);
+    if(value >= 1000)
+        font.setPointSize(24);
+    else if(value >= 100)
+        font.setPointSize(28);
+    else
+        font.setPointSize(32);
     font.setBold(true);
     (*(label_demoValue+index))->setFont(font);
     if(getTileColor()==QColor(Qt::white))
@@ -600,6 +649,69 @@ QColor GameView::getTileColor()
     return tileColor;
 }
 
+void GameView::oneTimeUnitPass()
+{
+    counterForStopWatch++;
+    if(counterForStopWatch >= 20)
+    {
+        timeLeft--;
+        setStopWatchValueAndShow(timeLeft);
+        counterForStopWatch = 0;
+
+    }
+    if(timeLeft == 20)
+    {
+        if(counterForStopWatch==0)
+        {
+            w->sound->soundBgMusicPlay_stop();
+            w->sound->soundBgMusicPlay(w->sound->gameviewBackgroundMusicHurry,34500);
+        }
+    }
+
+
+    //The following are for text twinkling effect
+    if(timeLeft <= 20)
+    {
+        if(timeLeft > 10)
+        {
+                ui->label_timeValue->setStyleSheet("QLabel{background-color : transparent ; color : orange}");
+
+        }
+        else if(timeLeft > 5)
+        {
+            if(counterForStopWatch%10 == 0)
+                ui->label_timeValue->setStyleSheet("QLabel{background-color : transparent ; color : yellow}");
+            else if(counterForStopWatch%10 == 5)
+                ui->label_timeValue->setStyleSheet("QLabel{background-color : transparent ; color : orange}");
+
+
+        }
+        else if(timeLeft > 0)
+        {
+            if(counterForStopWatch%4 == 0)
+                ui->label_timeValue->setStyleSheet("QLabel{background-color : transparent ; color : red}");
+            else if(counterForStopWatch%4 == 2)
+                ui->label_timeValue->setStyleSheet("QLabel{background-color : transparent ; color : yellow}");
+        }
+        else
+        {
+            ui->label_timeValue->setStyleSheet("QLabel{background-color : transparent ; color : red}");
+            gameOver();
+        }
+    }
+}
+
+void GameView::setStopWatchValueAndShow(int totalSecond)
+{
+    int min,sec;
+    min = totalSecond/60;
+    sec = totalSecond%60;
+    if(sec < 10)
+        ui->label_timeValue->setText(QString::number(min)+":0"+QString::number(sec));
+    else
+        ui->label_timeValue->setText(QString::number(min)+":"+QString::number(sec));
+}
+
 
 
 int GameView::getTileEdgeLengthValue()
@@ -637,7 +749,8 @@ void GameView::gameOver()
     w->sound->soundPlay_stop();
     w->sound->soundBgMusicPlay_stop();
     w->sound->soundPlay(w->sound->gameOverMusic);
-    gameEnd = true;
+    timerForStopWatch->stop();
+    keyEventBlock = true;
     gameStatusLabel.setText("Game Over\n(oДo)\"");
     QFont font;
     font.setPointSize(28);
@@ -645,22 +758,21 @@ void GameView::gameOver()
     gameStatusLabel.setFont(font);
     gameStatusLabel.setStyleSheet("QLabel{background-color : QColor(0,0,0,70) ; color : red}");
 
-    gameStatusBackground.setPen(QPen(QColor(30,30,30,50),1));
-    gameStatusBackground.setBrush(QColor(30,30,30,50));
-
-    gameAreaScene->addItem(&gameStatusBackground);
     gameAreaScene->addWidget(&gameStatusLabel);
     ui->pushButton_restartTheGame->setGeometry(controlPanelWidth+gap+(gap+tileEdgeLength)*(boardEdgeSize/2.0-0.75),
                                                gap+(gap+tileEdgeLength)*(boardEdgeSize/2.0+0.8),
                                                gap+tileEdgeLength*1.5,
                                                40);
+    ui->pushButton_pause->setEnabled(false);
+    ui->pushButton_quiet->setEnabled(false);
 }
 
 void GameView::gameWin()
 {
     w->sound->soundBgMusicPlay_stop();
     w->sound->soundPlay(w->sound->gameWinMusic);
-    gameEnd = true;
+    timerForStopWatch->stop();
+    keyEventBlock = true;
     gameStatusLabel.setText("You Win The Game\n\\^o^/");
     QFont font;
     font.setPointSize(28);
@@ -668,17 +780,25 @@ void GameView::gameWin()
     gameStatusLabel.setFont(font);
     gameStatusLabel.setStyleSheet("QLabel{background-color : QColor(0,0,0,50) ; color : white}");
 
-    gameAreaScene->addItem(&gameStatusBackground);
     gameAreaScene->addWidget(&gameStatusLabel);
     ui->pushButton_restartTheGame->setGeometry(controlPanelWidth+gap+(gap+tileEdgeLength)*(boardEdgeSize/2.0-0.75),
                                                gap+(gap+tileEdgeLength)*(boardEdgeSize/2.0+0.8),
                                                gap+tileEdgeLength*1.5,
                                                40);
+    ui->pushButton_pause->setEnabled(false);
+    ui->pushButton_quiet->setEnabled(false);
 }
 
 
 void GameView::on_pushButton_IDontWantToPlay_clicked()
 {
+    ui->pushButton_pause->setIcon(QIcon(":/images/resource/skeleton.jpg"));
+    ui->pushButton_quiet->setIcon(QIcon(":/images/resource/skeleton.jpg"));
+    ui->pushButton_pause->setEnabled(false);
+    ui->pushButton_quiet->setEnabled(false);
+
+    ui->pushButton_IDontWantToPlay->setIcon(QIcon(":/images/resource/skeleton.jpg"));
+
     gameOver();
 }
 
@@ -697,4 +817,75 @@ void GameView::on_pushButton_goBackToMenu_clicked()
                           QMessageBox::Yes | QMessageBox::No);
     if(reply == QMessageBox::Yes)
         this->close();
+}
+
+void GameView::on_pushButton_quiet_clicked()
+{
+    if(isBackgroundMusicOn)
+    {
+        w->sound->soundBgMusicPlay_stop();
+        ui->pushButton_quiet->setIcon(QIcon(":/images/resource/speakerQuiet.png"));
+        ui->pushButton_quiet->setIconSize(QSize(30,30));
+        isBackgroundMusicOn = false;
+    }
+    else    //background music is off
+    {
+        if(!isGamePaused)   //Resume music when game is in playing status
+        {
+            if(timeLeft<=20)
+                w->sound->soundBgMusicPlay(w->sound->gameviewBackgroundMusicHurry,34500);
+            else
+                w->sound->soundBgMusicPlay(w->sound->gameviewBackgroundMusic,76800);
+        }
+        ui->pushButton_quiet->setIcon(QIcon(":/images/resource/speaker.png"));
+        ui->pushButton_quiet->setIconSize(QSize(30,30));
+        isBackgroundMusicOn = true;
+    }
+
+}
+
+void GameView::on_pushButton_pause_clicked()
+{
+    if(isGamePaused)    //game is in paused status
+    {
+        timerForStopWatch->start(50);
+        keyEventBlock = false;
+        //set game status label
+        gameStatusLabel.setText(" ");
+        gameStatusLabel.setStyleSheet("QLabel{background-color : transparent ; color : transparent}");
+
+        //set sound properties
+        if(isBackgroundMusicOn) //Resume music only when background music is on
+        {
+            if(timeLeft<=20)
+                w->sound->soundBgMusicPlay(w->sound->gameviewBackgroundMusicHurry,34500);
+            else
+                w->sound->soundBgMusicPlay(w->sound->gameviewBackgroundMusic,76800);
+        }
+        ui->pushButton_pause->setIcon(QIcon(":/images/resource/pause.png"));
+        ui->pushButton_pause->setIconSize(QSize(30,30));
+        isGamePaused = false;
+    }
+    else    //game is in playing status
+    {
+        w->sound->soundPlay(w->sound->pauseAlert);
+        timerForStopWatch->stop();
+        keyEventBlock = true;
+
+        //set game status label
+        gameStatusLabel.setText("Pause\n（￣￢￣）. z Z ");
+        QFont font;
+        font.setPointSize(28);
+        font.setBold(true);
+        gameStatusLabel.setFont(font);
+        gameStatusLabel.setStyleSheet("QLabel{background-color : QColor(0,0,0,60) ; color : yellow}");
+        gameAreaScene->addWidget(&gameStatusLabel);
+
+        //set sound properties
+        w->sound->soundBgMusicPlay_stop();
+        ui->pushButton_pause->setIcon(QIcon(":/images/resource/play.png"));
+        ui->pushButton_pause->setIconSize(QSize(30,30));
+        isGamePaused = true;
+    }
+
 }

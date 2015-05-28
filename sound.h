@@ -14,6 +14,7 @@ public:
     //sound:Alert
     QMediaPlayer *warningAlert;
     QMediaPlayer *messageAlert;
+    QMediaPlayer *pauseAlert;
 
     //sound:music
     QMediaPlayer *welcomeMusic;
@@ -28,6 +29,7 @@ public:
     void soundPlay_stop();
     void soundBgMusicPlay(QMediaPlayer*,int soundTimeLength);
     void soundBgMusicPlay_stop();
+
 public slots:
     void soundBgMusicPlay_replay();
 

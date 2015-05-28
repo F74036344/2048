@@ -15,6 +15,8 @@ public:
     int getBoardEdgeSizeIndexValue();
     int getTileGenerateAmount();
     int getTileGenerateAmountIndex();
+    bool isTimeLimitChecked();
+    int getTimeLimitValue();
     QString getWhichTileColorButtonChecked();
     QColor getTileColor();
     QColor getTileTextColor();
@@ -26,6 +28,8 @@ public:
     void setTileColor(QColor);
     void setTileTextColor(QColor);
     void setWhichTileColorButtonChecked(QString);
+    void setTimeLimitIsChecked(bool);
+    void setTimeLimitValue(int);
 
     int power(int,int);
 
@@ -35,6 +39,8 @@ private:
     int tileGenerateAmountIndex;
     QString whichTileColorButtonChecked;
     bool tileColorIsWhite;
+    bool timeLimitIsChecked;
+    int timeLimitValue;
 };
 
 #endif // DATA_H

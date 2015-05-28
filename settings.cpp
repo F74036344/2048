@@ -52,6 +52,24 @@ settings::settings(QWidget *parent) :
         ui->radioButton_blue->setChecked(true);
     else if(w->data->getWhichTileColorButtonChecked() == QString("purple"))
         ui->radioButton_purple->setChecked(true);
+
+    //Setup spinBox basic properties
+
+    ui->spinBox_time->setMaximum(3600);
+    ui->spinBox_time->setMinimum(10);
+    ui->spinBox_time->setValue(w->data->getTimeLimitValue());
+    //Read spinBox information from data
+    if(w->data->isTimeLimitChecked() == true)
+    {
+        ui->checkBox_timeLimitation->setChecked(true);
+        ui->spinBox_time->setEnabled(true);
+    }
+    else    //==false
+    {
+        ui->checkBox_timeLimitation->setChecked(false);
+        ui->spinBox_time->setEnabled(false);
+    }
+
 }
 
 settings::~settings()
@@ -104,7 +122,14 @@ void settings::on_pushButton_Ok_clicked()
     else if(ui->radioButton_purple->isChecked())
         w->data->setWhichTileColorButtonChecked(QString("purple"));
 
-
+    //Save time limitation information into data
+    if(ui->checkBox_timeLimitation->isChecked())
+    {
+        w->data->setTimeLimitIsChecked(true);
+        w->data->setTimeLimitValue(ui->spinBox_time->value());
+    }
+    else
+        w->data->setTimeLimitIsChecked(false);
 
     this->close();
 
@@ -112,3 +137,14 @@ void settings::on_pushButton_Ok_clicked()
 }
 
 
+void settings::on_checkBox_timeLimitation_clicked()
+{
+    if(ui->spinBox_time->isEnabled())
+    {
+        ui->spinBox_time->setEnabled(false);
+    }
+    else
+    {
+        ui->spinBox_time->setEnabled(true);
+    }
+}

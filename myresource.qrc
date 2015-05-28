@@ -14,6 +14,11 @@
         <file>resource/bulb_s.png</file>
         <file>resource/castle_s.png</file>
         <file>resource/skeleton.jpg</file>
+        <file>resource/speaker.png</file>
+        <file>resource/speakerQuiet.png</file>
+        <file>resource/pause.png</file>
+        <file>resource/play.png</file>
+        <file>resource/bomb.jpg</file>
     </qresource>
     <qresource prefix="/sounds">
         <file>resource/game_start.wav</file>
@@ -26,6 +31,7 @@
         <file>resource/gameview_music.mp3</file>
         <file>resource/gameview_musicHurry.mp3</file>
         <file>resource/gameWin.mp3</file>
+        <file>resource/pause.wav</file>
     </qresource>
     <qresource prefix="/animation">
         <file>resource/powered_by_Qt.gif</file>

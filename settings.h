@@ -23,6 +23,8 @@ private slots:
 
     void on_pushButton_Ok_clicked();
 
+    void on_checkBox_timeLimitation_clicked();
+
 private:
     Ui::settings *ui;
 };
