@@ -59,6 +59,10 @@
     <property name="text">
      <string>Game Start !</string>
     </property>
+    <property name="icon">
+     <iconset resource="myresource.qrc">
+      <normaloff>:/images/resource/start.png</normaloff>:/images/resource/start.png</iconset>
+    </property>
    </widget>
    <widget class="QPushButton" name="pushButton_settings">
     <property name="geometry">
@@ -72,6 +76,10 @@
     <property name="text">
      <string>Settings</string>
     </property>
+    <property name="icon">
+     <iconset resource="myresource.qrc">
+      <normaloff>:/images/resource/setting_icon.png</normaloff>:/images/resource/setting_icon.png</iconset>
+    </property>
    </widget>
    <widget class="QPushButton" name="pushButton_quitGame">
     <property name="geometry">
@@ -84,6 +92,10 @@
     </property>
     <property name="text">
      <string>Quit the Game</string>
+    </property>
+    <property name="icon">
+     <iconset resource="myresource.qrc">
+      <normaloff>:/images/resource/exit.png</normaloff>:/images/resource/exit.png</iconset>
     </property>
    </widget>
    <widget class="QLabel" name="label_logo">

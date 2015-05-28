@@ -34,6 +34,8 @@ settings::settings(QWidget *parent) :
         ui->radioButton_5->setChecked(true);
     else if(w->data->getWhichGoalButtonChecked() == 6)
         ui->radioButton_6->setChecked(true);
+    else if(w->data->getWhichGoalButtonChecked() == 7)
+        ui->radioButton_XD->setChecked(true);
 
     //Read radioButton imformation(tileColor information)from data
     if(w->data->getWhichTileColorButtonChecked() == QString("default"))
@@ -103,6 +105,8 @@ void settings::on_pushButton_Ok_clicked()
         w->data->setWhichGoalButtonChecked(5);
     else if(ui->radioButton_6->isChecked())
         w->data->setWhichGoalButtonChecked(6);
+    else if(ui->radioButton_XD->isChecked())
+        w->data->setWhichGoalButtonChecked(7);
 
     //Save tileColor information to data
     if(ui->radioButton_defaultColor->isChecked())

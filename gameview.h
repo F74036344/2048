@@ -28,23 +28,30 @@ public:
     //step1:keyPressEvent():接收玩家的上下左右指令
     //step2:moveTile():根據所收到的上下左右指令移動tile
     //step3:generateTile():生成新的tile
-    //step4:checkIfAnyTileReachGoal():檢查有沒有tile的value達到goal了，如果有則gameWin
-    //step5:checkIfAnyTileIsMovable():檢查還有沒有可移動的tile，如果沒有則gameOver
+    //step4:tileAnimationImplementation():實作tile動畫(將step2,3之結果顯示出來)
+    //step5:checkIfAnyTileReachGoal():檢查有沒有tile的value達到goal了，如果有則gameWin
+    //step6:checkIfAnyTileIsMovable():檢查還有沒有可移動的tile，如果沒有則gameOver
+
     //然後再接續step1,周而復始，直至gameOver或gameWin
+
     void emitMoveTileSignalToAll(QString);
         void moveTile(int,QString);
 
     void generateTile();	//generate tile
+    void tileAnimationImplementation();
     void checkIfAnyTileReachGoal(); //Check if any *tile's value reaches the goal. If is, then gameWin
     void checkIfAnyTileIsMovable();	//Check if all tiles are unmovable.If are, then gameOver
 
 
-    void tileCreator(int);
+    void tileCreator(int,int);
         void tileTextCreator(int,int);
         void tileRectCreator(int);
     void tileDestructor(int);
 
     void scoreAddAndShow(int);
+
+    void gameStatusLabelCreator();
+    void gameStatusLabelDestructor();
 
     void setTileColor(QColor);
     QColor getTileColor();
@@ -89,7 +96,7 @@ private:
     Ui::GameView *ui;
     QGraphicsRectItem *rectBlock;
     QGraphicsRectItem gameAreaFrame;
-    QLabel gameStatusLabel;
+    QLabel *gameStatusLabel;
     int controlPanelWidth,controlPanelHeight;
     int gameAreaPosX,gameAreaPosY;
     int boardEdgeSize;
@@ -102,7 +109,7 @@ private:
     //tile properties
     int tileEdgeLength,gameAreaEdgeLength,gap;
     QColor tileColor;
-    int *currentValueOfTile;
+    int *currentValueOfTile,*nextValueOfTile,*nextPosOfTile;   //為了做tile動畫，所以需要兩個array分別存移動前，移動後tile之位置與值
     int score;
 
     //tile animation properties

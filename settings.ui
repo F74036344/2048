@@ -128,6 +128,16 @@
            </item>
           </layout>
          </item>
+         <item>
+          <widget class="QRadioButton" name="radioButton_XD">
+           <property name="text">
+            <string>4(XD</string>
+           </property>
+           <attribute name="buttonGroup">
+            <string notr="true">buttonGroup</string>
+           </attribute>
+          </widget>
+         </item>
         </layout>
        </item>
        <item>

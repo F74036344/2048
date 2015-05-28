@@ -81,6 +81,10 @@
    <property name="text">
     <string>Restart the Game</string>
    </property>
+   <property name="icon">
+    <iconset resource="myresource.qrc">
+     <normaloff>:/images/resource/restart.png</normaloff>:/images/resource/restart.png</iconset>
+   </property>
   </widget>
   <widget class="QLabel" name="label_goalText">
    <property name="geometry">
@@ -135,12 +139,12 @@
    </property>
    <property name="icon">
     <iconset resource="myresource.qrc">
-     <normaloff>:/images/resource/bomb.jpg</normaloff>:/images/resource/bomb.jpg</iconset>
+     <normaloff>:/images/resource/bomb2.png</normaloff>:/images/resource/bomb2.png</iconset>
    </property>
    <property name="iconSize">
     <size>
-     <width>45</width>
-     <height>45</height>
+     <width>65</width>
+     <height>65</height>
     </size>
    </property>
   </widget>
@@ -154,7 +158,11 @@
     </rect>
    </property>
    <property name="text">
-    <string>Go back to Menu</string>
+    <string>Go back </string>
+   </property>
+   <property name="icon">
+    <iconset resource="myresource.qrc">
+     <normaloff>:/images/resource/goBack.png</normaloff>:/images/resource/goBack.png</iconset>
    </property>
   </widget>
   <widget class="QPushButton" name="pushButton_quiet">

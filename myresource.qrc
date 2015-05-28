@@ -19,6 +19,11 @@
         <file>resource/pause.png</file>
         <file>resource/play.png</file>
         <file>resource/bomb.jpg</file>
+        <file>resource/start.png</file>
+        <file>resource/goBack.png</file>
+        <file>resource/bomb2.png</file>
+        <file>resource/skeleton2.png</file>
+        <file>resource/deadface.png</file>
     </qresource>
     <qresource prefix="/sounds">
         <file>resource/game_start.wav</file>

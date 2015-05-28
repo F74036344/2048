@@ -9,7 +9,7 @@ Data::Data()
     setTileGenerateAmountIndex(0);
     setWhichTileColorButtonChecked(QString("default"));
     setTimeLimitIsChecked(false);
-    setTimeLimitValue(120);
+    setTimeLimitValue(300);
 }
 
 Data::~Data()
