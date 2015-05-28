@@ -34,21 +34,21 @@ public:
 
     //然後再接續step1,周而復始，直至gameOver或gameWin
 
-    void emitMoveTileSignalToAll(QString);
+    void emitMoveTileSignalToAll(QString motion);
         void moveTile(int,QString);
 
     void generateTile();	//generate tile
-    void tileAnimationImplementation();
+    void tileAnimation();
     void checkIfAnyTileReachGoal(); //Check if any *tile's value reaches the goal. If is, then gameWin
     void checkIfAnyTileIsMovable();	//Check if all tiles are unmovable.If are, then gameOver
 
 
-    void tileCreator(int,int);
+    void tileCreator(int index,int value);
         void tileTextCreator(int,int);
         void tileRectCreator(int);
-    void tileDestructor(int);
+    void tileDestructor(int value);
 
-    void scoreAddAndShow(int);
+    void scoreAddAndShow(int variation);
 
     void gameStatusLabelCreator();
     void gameStatusLabelDestructor();
@@ -56,7 +56,7 @@ public:
     void setTileColor(QColor);
     QColor getTileColor();
 
-    void setStopWatchValueAndShow(int);
+    void setStopWatchValueAndShow(int totalSecond);
 
     int getTileEdgeLengthValue();
     int getGapValue();
@@ -64,7 +64,7 @@ public:
     int getCurrentValueOfTile(int);
     void setCurrentValueOfTile(int,int);
 
-    int power(int,int);
+    int power(int a,int n);
 
 
     void gameOver();
@@ -87,6 +87,8 @@ private slots:
     void on_pushButton_pause_clicked();
 
     void oneTimeUnitPass();
+
+    void tileAnimationImplementation();
 
 private:
 
@@ -120,7 +122,7 @@ private:
 
     QTimer *timerForMove, *timerForScale, *timerForEmerge;
     QTimer *timerForStopWatch;
-    int counterForStopWatch;
+    int counterForMoveStep,counterForStopWatch;
 };
 
 #endif // GAMEVIEW_H
