@@ -39,8 +39,8 @@ public:
 
     void generateTile();	//generate tile
     void tileAnimation();
-    void checkIfAnyTileReachGoal(); //Check if any *tile's value reaches the goal. If is, then gameWin
-    void checkIfAnyTileIsMovable();	//Check if all tiles are unmovable.If are, then gameOver
+    int checkIfAnyTileReachGoal(); //Check if any *tile's value reaches the goal. If is, then gameWin
+    int checkIfAnyTileIsMovable();	//Check if all tiles are unmovable.If are, then gameOver
 
 
     void tileCreator(int index,int value);
@@ -113,6 +113,8 @@ private:
     QColor tileColor;
     int *currentValueOfTile,*nextValueOfTile,*nextPosOfTile;   //為了做tile動畫，所以需要兩個array分別存移動前，移動後tile之位置與值
     int score;
+
+    int totalTileAmount;
 
     //tile animation properties
     bool *tileIsActing;

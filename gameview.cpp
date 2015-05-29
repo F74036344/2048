@@ -18,6 +18,8 @@ GameView::GameView(QWidget *parent) :
     ui->setupUi(this);
     qsrand(QTime::currentTime().msec());
 
+    totalTileAmount = 0;
+
     timeLeft = w->data->getTimeLimitValue();
     if(w->data->isTimeLimitChecked() && timeLeft<=20)
     {
@@ -255,6 +257,7 @@ void GameView::keyPressEvent(QKeyEvent *event)  //step 1:receive key event from 
 
         }
     }
+            qDebug() << "Step0:keyPressEvent done";
 }
 void GameView::emitMoveTileSignalToAll(QString motion)
 {
@@ -298,8 +301,9 @@ void GameView::emitMoveTileSignalToAll(QString motion)
 
     if(isAnyTileMoved)  //If any tile is moved, then generate tile;Otherwise do nothing
     {
-        generateTile();
+        generateTile(); //step3
     }
+            qDebug() << "Step1:emitMoveSignalToAll done";
 
 }
 
@@ -498,7 +502,7 @@ void GameView::moveTile(int index,QString motion) //step 2:move tiles
 
         }
     }
-
+        qDebug() << "Step2:moveTile done";
 }
 
 void GameView::generateTile()   //step 3
@@ -542,13 +546,13 @@ void GameView::generateTile()   //step 3
         //已配置一個新的*tile，so total_index_available_amount -1;
         total_index_available_amount--;
     }
-    qDebug()<<"currentValueOfTile:";
-    for(int i=0;i<boardEdgeSize;i++)
+    //qDebug()<<"currentValueOfTile:";
+    /*for(int i=0;i<boardEdgeSize;i++)
         qDebug()<<*(currentValueOfTile+i*boardEdgeSize)<<" "<<*(currentValueOfTile+i*boardEdgeSize+1)
-               <<" "<<*(currentValueOfTile+i*boardEdgeSize+2)<<" "<<*(currentValueOfTile+i*boardEdgeSize+3);
+               <<" "<<*(currentValueOfTile+i*boardEdgeSize+2)<<" "<<*(currentValueOfTile+i*boardEdgeSize+3);*/
 
-    //qDebug() << "Step3:generateTile done";
-    tileAnimation();  //進入step 4
+    qDebug() << "Step3:generateTile done";
+            tileAnimation();    //step4
 }
 
 
@@ -557,12 +561,9 @@ void GameView::generateTile()   //step 3
 
 
 void GameView::tileAnimation()    //step 4 tile動畫實作
+//動畫效果不如預期....當當的=口=
 {
-    keyEventBlock = true;   //Block keyPressEvent during the tile animation
-    counterForMoveStep = 0;
-    connect(timerForMove,SIGNAL(timeout()),this,SLOT(tileAnimationImplementation()));
-    timerForMove->start(15);    //move a tiny step in 15 ms
-
+    tileAnimationImplementation();
 }
 
 
@@ -570,7 +571,7 @@ void GameView::tileAnimation()    //step 4 tile動畫實作
 
 
 
-void GameView::checkIfAnyTileReachGoal()    //step 5:檢查是否有tile的value已到達目標
+int GameView::checkIfAnyTileReachGoal()    //step 5:檢查是否有tile的value已到達目標
 {
     for(int i=0;i<power(boardEdgeSize,2);i++)
     {
@@ -586,10 +587,10 @@ void GameView::checkIfAnyTileReachGoal()    //step 5:檢查是否有tile的value
         }
     }
        qDebug() << "Step5:checkIfAnyTileReachGoal done";
-    checkIfAnyTileIsMovable();	//進入step6:檢查還有沒有可以動的*tile
+    return 0;
 }
 
-void GameView::checkIfAnyTileIsMovable()    //step 6:檢查還有沒有可以動的tile
+int GameView::checkIfAnyTileIsMovable()    //step 6:檢查還有沒有可以動的tile
 {
     //檢查是否所有*tile皆已不能動
        bool allTileCanNotMove = true;
@@ -633,15 +634,17 @@ void GameView::checkIfAnyTileIsMovable()    //step 6:檢查還有沒有可以動
        }
        //如果還有tile能動的話，則沒有動作退出此函式，等待下一次的keyPressEvent
 
-       qDebug() << "Step6:checkIfAnyTileMovable done";
-       qDebug()<<"nextPosOfTile";
+       /*qDebug()<<"nextPosOfTile";
        for(int i=0;i<boardEdgeSize;i++)
            qDebug()<<*(nextPosOfTile+i*boardEdgeSize)<<" "<<*(nextPosOfTile+i*boardEdgeSize+1)
                   <<" "<<*(nextPosOfTile+i*boardEdgeSize+2)<<" "<<*(nextPosOfTile+i*boardEdgeSize+3);
        qDebug()<<"nextValueOfTile";
        for(int i=0;i<boardEdgeSize;i++)
            qDebug()<<*(nextValueOfTile+i*boardEdgeSize)<<" "<<*(nextValueOfTile+i*boardEdgeSize+1)
-                  <<" "<<*(nextValueOfTile+i*boardEdgeSize+2)<<" "<<*(nextValueOfTile+i*boardEdgeSize+3);
+                  <<" "<<*(nextValueOfTile+i*boardEdgeSize+2)<<" "<<*(nextValueOfTile+i*boardEdgeSize+3);*/
+
+       qDebug() << "Step6:checkIfAnyTileMovable done";
+       return 0;
 }
 
 
@@ -790,90 +793,29 @@ void GameView::oneTimeUnitPass()
 
 void GameView::tileAnimationImplementation()
 {
-    int moveUnit = 5;   //in pixel
-    int index;
-    //根據nextPosOfTile和currentValueOfTile做出tile動畫
-    //在動畫完成後delete掉所有的tile，並再根據nextValueOfTile建立新的tile
-    for(int row=0;row<boardEdgeSize;row++)
-        for(int col=0;col<boardEdgeSize;col++)
-        {
-            index = col + row*boardEdgeSize;
-            if((*(nextPosOfTile+index))==-1)    //-1 means not to move
-                ;   //do nothing
-            else
-            {
-                int posDifference = *(nextPosOfTile+index)-index;   //nextPos-currentPos
-                int displacement;   //unit:block
-                if(posDifference/boardEdgeSize < 0)    //move up
-                {
-                    displacement = posDifference/boardEdgeSize;
-                    (*(tile+col+row*boardEdgeSize))->setPos((*(tile+col+row*boardEdgeSize))->x(),
-                                                            (*(tile+col+row*boardEdgeSize))->y()+displacement*moveUnit);
-                    (*(label_demoValue+col+row*boardEdgeSize))->setGeometry((*(label_demoValue+col+row*boardEdgeSize))->x(),
-                                                                            (*(label_demoValue+col+row*boardEdgeSize))->y()+displacement*moveUnit,
-                                                                            tileEdgeLength,
-                                                                            tileEdgeLength);
-
-                }
-                else if(posDifference/boardEdgeSize > 0) //move down
-                {
-                    displacement = posDifference/boardEdgeSize;
-                    (*(tile+col+row*boardEdgeSize))->setPos((*(tile+col+row*boardEdgeSize))->x(),
-                                                            (*(tile+col+row*boardEdgeSize))->y()+displacement*moveUnit);
-                    (*(label_demoValue+col+row*boardEdgeSize))->setGeometry((*(label_demoValue+col+row*boardEdgeSize))->x(),
-                                                                            (*(label_demoValue+col+row*boardEdgeSize))->y()+displacement*moveUnit,
-                                                                            tileEdgeLength,
-                                                                            tileEdgeLength);
-
-                }
-                else if(posDifference/boardEdgeSize == 0)
-                {
-                    if(posDifference%boardEdgeSize < 0)  //move left
-                    {
-                        displacement = posDifference%boardEdgeSize;
-                        (*(tile+col+row*boardEdgeSize))->setPos((*(tile+col+row*boardEdgeSize))->x()+displacement*moveUnit,
-                                                                (*(tile+col+row*boardEdgeSize))->y());
-                        (*(label_demoValue+col+row*boardEdgeSize))->setGeometry((*(label_demoValue+col+row*boardEdgeSize))->x()+displacement*moveUnit,
-                                                                                (*(label_demoValue+col+row*boardEdgeSize))->y(),
-                                                                                tileEdgeLength,
-                                                                                tileEdgeLength);
-                    }
-                    else if(posDifference%boardEdgeSize > 0) //move right
-                    {
-                        displacement = posDifference%boardEdgeSize;
-                        (*(tile+col+row*boardEdgeSize))->setPos((*(tile+col+row*boardEdgeSize))->x()+displacement*moveUnit,
-                                                                (*(tile+col+row*boardEdgeSize))->y());
-                        (*(label_demoValue+col+row*boardEdgeSize))->setGeometry((*(label_demoValue+col+row*boardEdgeSize))->x()+displacement*moveUnit,
-                                                                                (*(label_demoValue+col+row*boardEdgeSize))->y(),
-                                                                                tileEdgeLength,
-                                                                                tileEdgeLength);
-                    }
-                }
-
-            }
-        }
-    counterForMoveStep++;
-
-    if(counterForMoveStep >= 17)    //finish the animation  //17(moveStepAmount)*15(each step cost time)=255
-    {
-        timerForMove->stop();
-        for(int i=0;i<power(boardEdgeSize,2);i++) //delete all tile
-            tileDestructor(i);
-        qDebug()<<"all tile are deleted successfully";
+        /*for(int i=0;i<power(boardEdgeSize,2);i++) //delete all tile
+            tileDestructor(i);*/
         for(int i=0;i<power(boardEdgeSize,2);i++) //construct all tile based on nextValueOfTile
         {
             if(*(nextValueOfTile+i)!=0)
+            {
+                if(*(tile+i)!=NULL)
+                    tileDestructor(i);
                 tileCreator(i,*(nextValueOfTile+i));
+            }
+            else
+                tileDestructor(i);
         }
-        qDebug()<<"all tiles are created succesfully";
         keyEventBlock = false;  //stop blocking keyPressEvent
 
         //動畫實作完畢，可以將currentValueOfTile用nextValueOfTile覆蓋過去了
         for(int i=0;i<power(boardEdgeSize,2);i++)
             *(currentValueOfTile+i) = *(nextValueOfTile+i);
+        qDebug() << "Step4:tileAnimation done";
         checkIfAnyTileReachGoal();  //進入step5
+        checkIfAnyTileIsMovable();	//進入step6:檢查還有沒有可以動的*tile
 
-    }
+
 }
 
 void GameView::setStopWatchValueAndShow(int totalSecond)

@@ -20,7 +20,10 @@ Data::~Data()
 //get value functions
 int Data::getGoalValue()
 {
-    return power(2,getWhichGoalButtonChecked()+6);
+    if(getWhichGoalButtonChecked()==7)
+        return 4;
+    else
+        return power(2,getWhichGoalButtonChecked()+6);
 }
 int Data::getWhichGoalButtonChecked()
 {
