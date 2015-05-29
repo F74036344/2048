@@ -102,23 +102,9 @@ GameView::GameView(QWidget *parent) :
 
 
     //**Set the properties for animation START
-    tileIsActing = new bool[power(boardEdgeSize,2)];
-    for(int i=0;i<power(boardEdgeSize,2);i++)
-        *tileIsActing = false;
-    moveTimeTiny = 3;
-    scaleTimeTiny = 15;
-    emergeTimeTiny = 15;
 
-    //moveDistanceTiny would be initialize whne move function is called
-    scaleDistanceTiny = 1;
-    emergeDistanceTiny = 1;
-
-    moveTinyStepAmount = 85;
-    scaleTinyStepAmount = 15;
-    emergeTinyStepAmount = 40;
-
+    isThisIndexGenerateNewTile = new bool[power(boardEdgeSize,2)];
     timerForMove = new QTimer;
-    timerForScale = new QTimer;
     timerForEmerge = new QTimer;
 
     //**Set the properties for animation END
@@ -209,11 +195,9 @@ GameView::~GameView()
     delete [] nextPosOfTile;
     delete [] rectBlock;
     delete gameStatusLabel;
-    delete timerForEmerge;
-    delete timerForMove;
-    delete timerForScale;
-    delete [] tileIsActing;
     delete timerForStopWatch;
+    delete timerForMove;
+    delete timerForEmerge;
     //delete gameAreaScene;
 
 }
@@ -507,7 +491,9 @@ void GameView::moveTile(int index,QString motion) //step 2:move tiles
 
 void GameView::generateTile()   //step 3
 {
-
+    //Initialize isThisIndexGenerateNewTile for step 4-2
+    for(int i=0;i<power(boardEdgeSize,2);i++)
+        *(isThisIndexGenerateNewTile+i) = false;
     int ballot[power(boardEdgeSize,2)];
     int current_index=0;
 
@@ -537,7 +523,8 @@ void GameView::generateTile()   //step 3
         }
         current_index = qrand()%(total_index_available_amount);
 
-        (*(nextValueOfTile+ballot[current_index])) = 2;  //設定初值 //step4 會將tile實體化
+        (*(nextValueOfTile+ballot[current_index])) = 2;  //設定初值 //step4 會實作tile的動畫
+        *(isThisIndexGenerateNewTile+ballot[current_index]) = true; //將生成新tile的繪製記錄下來，待會step4做tile的emerge動畫時要用
 
         //籤已被用走一個->該籤需從ballot中刪掉
         for(int j=current_index;j<total_index_available_amount-1;j++)
@@ -552,7 +539,7 @@ void GameView::generateTile()   //step 3
                <<" "<<*(currentValueOfTile+i*boardEdgeSize+2)<<" "<<*(currentValueOfTile+i*boardEdgeSize+3);*/
 
     qDebug() << "Step3:generateTile done";
-            tileAnimation();    //step4
+            tileAniMove();    //step4
 }
 
 
@@ -560,18 +547,14 @@ void GameView::generateTile()   //step 3
 
 
 
-void GameView::tileAnimation()    //step 4 tile動畫實作
+void GameView::tileAniMove()    //step 4-1 tile動畫實作:Move
 {
     keyEventBlock = true;   //Block keyPressEvent during the tile animation
     //keyEventBlock would be unlocked in the end of step 6
     counterForMoveStep = 0;
-    connect(timerForMove,SIGNAL(timeout()),this,SLOT(tileAnimationImplementation()));
+    connect(timerForMove,SIGNAL(timeout()),this,SLOT(tileAniMoveImplementation()));
     timerForMove->start(10);    //move a tiny step in 15 ms
 }
-
-
-
-
 
 
 void GameView::checkIfAnyTileReachGoal()    //step 5:檢查是否有tile的value已到達目標
@@ -742,6 +725,65 @@ void GameView::tileDestructor(int index)
     *(label_demoValue+index) = NULL;    //prevent from deleteing twice
 }
 
+void GameView::tmpDisplayEmergeTileInitializer(int selfIndex,int index, int value)
+{
+    tmpDisplayEmergeTileRectInitializer(selfIndex,index,value);
+    //tmpDisplayEmergeTileTextInitializer(selfIndex,index,value);
+}
+
+void GameView::tmpDisplayEmergeTileRectInitializer(int selfIndex,int index, int value)
+{
+    int row = index/boardEdgeSize;
+    int col = index%boardEdgeSize;
+    tmpDisplayEmergeTileEdgeLength = 0;
+    (tmpDisplayEmergeTile+selfIndex)->setRect(0,
+                                              0,
+                                              tmpDisplayEmergeTileEdgeLength,
+                                              tmpDisplayEmergeTileEdgeLength);
+    (tmpDisplayEmergeTile+selfIndex)->setPos(gap+(gap+tileEdgeLength)*col+tileEdgeLength/2-tmpDisplayEmergeTileEdgeLength/2,
+                                             gap+(gap+tileEdgeLength)*row+tileEdgeLength/2-tmpDisplayEmergeTileEdgeLength/2);
+    //依照tileColor來決定pen(外框)的顏色
+    if(tileColor == QString("white"))
+        (tmpDisplayEmergeTile+selfIndex)->setPen(QPen(Qt::black,3));
+    else
+        (tmpDisplayEmergeTile+selfIndex)->setPen(QPen(getTileColor(value),1));
+    (tmpDisplayEmergeTile+selfIndex)->setBrush(getTileColor(value));
+    gameAreaScene->addItem(tmpDisplayEmergeTile+selfIndex);
+}
+
+/*void GameView::tmpDisplayEmergeTileTextInitializer(int selfIndex,int index, int value)
+{
+    int row = index/boardEdgeSize;
+    int col = index%boardEdgeSize;
+    tmpDisplayEmergeTileEdgeLength = 12;
+    (tmpDisplayEmergeLabel+selfIndex)->setGeometry(gap+(gap+tileEdgeLength)*col+tileEdgeLength/2-tmpDisplayEmergeTileEdgeLength/2,
+                                                   gap+(gap+tileEdgeLength)*row+tileEdgeLength/2-tmpDisplayEmergeTileEdgeLength/2,
+                                                   tmpDisplayEmergeTileEdgeLength,
+                                                   tmpDisplayEmergeTileEdgeLength);
+    QFont font;
+    if(value >= 1000)
+        tmpDisplayEmergeLabelFontSize = 7;
+    else if(value >= 100)
+        tmpDisplayEmergeLabelFontSize = 11;
+    else
+        tmpDisplayEmergeLabelFontSize = 15;
+    font.setPointSize(tmpDisplayEmergeLabelFontSize);
+    font.setBold(true);
+    (tmpDisplayEmergeLabel+selfIndex)->setFont(font);
+    if(tileColor==QString("white"))
+        (tmpDisplayEmergeLabel+selfIndex)->setStyleSheet("QLabel{background-color : transparent ; color : black}");
+    else
+        (tmpDisplayEmergeLabel+selfIndex)->setStyleSheet("QLabel{background-color : transparent ; color : white}");
+    (tmpDisplayEmergeLabel+selfIndex)->setAlignment(Qt::AlignCenter);
+    gameAreaScene->addWidget(tmpDisplayEmergeLabel+selfIndex);
+}*/
+
+void GameView::tmpDisplayEmergeTileDestructor(int selfIndex)
+{
+    //delete (tmpDisplayEmergeLabel+selfIndex);
+    delete (tmpDisplayEmergeTile+selfIndex);
+}
+
 void GameView::scoreAddAndShow(int variation)
 {
     score += variation;
@@ -890,12 +932,18 @@ void GameView::oneTimeUnitPass()
     }
 }
 
-void GameView::tileAnimationImplementation()
+
+
+
+
+
+void GameView::tileAniMoveImplementation()
 {
     int moveUnit = 5;   //in pixel
     int index;
     //根據nextPosOfTile和currentValueOfTile做出tile動畫
     //在動畫完成後，根據nextValueOfTile建立新的tile
+    //Start to implement move animation
     for(int row=0;row<boardEdgeSize;row++)
         for(int col=0;col<boardEdgeSize;col++)
         {
@@ -957,34 +1005,106 @@ void GameView::tileAnimationImplementation()
             }
 
         }
+
     counterForMoveStep++;
+    if(counterForMoveStep == 13)    //step 4-2:tile動畫實作:Move
+    {
+        //prepare emerge animation
+        newTileAmount = 0;
+        for(int i=0;i<power(boardEdgeSize,2);i++)
+            if(*(isThisIndexGenerateNewTile+i))
+                newTileAmount++;
+        tmpDisplayEmergeTile = new QGraphicsRectItem[newTileAmount];
+        int tmpTileIndex = 0;
+        for(int index=0;index<power(boardEdgeSize,2);index++)   //To assign information (based on isThisIndexGenerateNewTile)to tmpDisplayEmergeTile
+            if(*(isThisIndexGenerateNewTile+index))
+            {
+                tmpDisplayEmergeTileInitializer(tmpTileIndex,index,*(nextValueOfTile+index));
+                tmpTileIndex++;
+                qDebug()<<"tmpDisplayEmergeTile "<<tmpTileIndex<<" initialized";
+            }
+        qDebug()<<"newTileAmount:"<<newTileAmount;
+        counterForEmergeStep = 0;
+        connect(timerForEmerge,SIGNAL(timeout()),this,SLOT(tileAniEmergeImplementation()));
+        timerForEmerge->start(15);
+    }
     if(counterForMoveStep >= 17)    //finish the animation  //17(moveStepAmount)*15(each step cost time)=255
     {
         timerForMove->stop();
-        disconnect(timerForMove,SIGNAL(timeout()),this,SLOT(tileAnimationImplementation()));
-        /*for(int i=0;i<power(boardEdgeSize,2);i++) //delete all tile
-            tileDestructor(i);*/
-        for(int i=0;i<power(boardEdgeSize,2);i++) //construct all tile based on nextValueOfTile
+        disconnect(timerForMove,SIGNAL(timeout()),this,SLOT(tileAniMoveImplementation()));
+        for(int i=0;i<power(boardEdgeSize,2);i++) //將畫面依照nextValueOfTile重新建置
         {
             if(*(nextValueOfTile+i)!=0)
             {
-                if(*(tile+i)!=NULL)
+                if(*(isThisIndexGenerateNewTile+i))
+                    tileDestructor(i);  //delete the pos where is to generate tile because of the emerge animation
+                else
+                {
+
                     tileDestructor(i);
-                tileCreator(i,*(nextValueOfTile+i));
+                    tileCreator(i,*(nextValueOfTile+i));
+                }
             }
-            else
+            else    //empty tile
                 tileDestructor(i);
+        }
+        qDebug() << "Step4-1:tileAniMove done";
+    }
+
+}
+
+
+void GameView::tileAniEmergeImplementation()
+{
+    int scaleUnit = 5;  //in pixel
+    //Start to implement emerge animation
+    //QFont font;
+    for(int i=0;i<newTileAmount;i++)
+    {
+        //rect emerge animation
+        (tmpDisplayEmergeTile+i)->setRect(0,
+                                          0,
+                                          tmpDisplayEmergeTileEdgeLength + scaleUnit*2,
+                                          tmpDisplayEmergeTileEdgeLength + scaleUnit*2);
+        (tmpDisplayEmergeTile+i)->setPos((tmpDisplayEmergeTile+i)->x() - scaleUnit,
+                                         (tmpDisplayEmergeTile+i)->y() - scaleUnit);
+        //label emerge animation
+        /*(tmpDisplayEmergeLabel+i)->setGeometry((tmpDisplayEmergeLabel+i)->x()-scaleUnit,
+                                               (tmpDisplayEmergeLabel+i)->y()-scaleUnit,
+                                               (tmpDisplayEmergeLabel+i)->width()+scaleUnit*2,
+                                               (tmpDisplayEmergeLabel+i)->height()+scaleUnit*2);
+        font.setPointSize(tmpDisplayEmergeLabelFontSize+1);
+        (tmpDisplayEmergeLabel+i)->setFont(font);*/
+
+    }
+    tmpDisplayEmergeTileEdgeLength += scaleUnit*2;
+    //tmpDisplayEmergeLabelFontSize++;
+
+    counterForEmergeStep++;
+
+    if(counterForEmergeStep >= 8)
+    {
+        timerForEmerge->stop();
+        disconnect(timerForEmerge,SIGNAL(timeout()),this,SLOT(tileAniEmergeImplementation()));
+        for(int i=0;i<newTileAmount;i++)    //delete tmpDisplayEmerge tile
+            tmpDisplayEmergeTileDestructor(i);
+        for(int i=0;i<power(boardEdgeSize,2);i++) //將step4-1尚未重新建置的tile(即new tile)重新建置
+        {
+            if(*(isThisIndexGenerateNewTile+i))
+               tileCreator(i,*(nextValueOfTile+i));
         }
 
         //動畫實作完畢，可以將currentValueOfTile用nextValueOfTile覆蓋過去了
         for(int i=0;i<power(boardEdgeSize,2);i++)
             *(currentValueOfTile+i) = *(nextValueOfTile+i);
-        qDebug() << "Step4:tileAnimation done";
+        qDebug() << "Step4-2:tileAniEmerge done";
         checkIfAnyTileReachGoal();  //進入step5
-
     }
-
 }
+
+
+
+
 
 void GameView::setStopWatchValueAndShow(int totalSecond)
 {

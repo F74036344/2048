@@ -38,7 +38,8 @@ public:
         void moveTile(int,QString);
 
     void generateTile();	//generate tile
-    void tileAnimation();
+    void tileAniMove();
+    void tileAniEmerge();
     void checkIfAnyTileReachGoal(); //Check if any *tile's value reaches the goal. If is, then gameWin
     void checkIfAnyTileIsMovable();	//Check if all tiles are unmovable.If are, then gameOver
 
@@ -47,6 +48,11 @@ public:
         void tileTextCreator(int index,int value);
         void tileRectCreator(int index,int value);
     void tileDestructor(int value);
+
+    void tmpDisplayEmergeTileInitializer(int selfIndex,int index,int value);
+        void tmpDisplayEmergeTileRectInitializer(int selfIndex,int index,int value);
+        //void tmpDisplayEmergeTileTextInitializer(int selfIndex,int index,int value);
+    void tmpDisplayEmergeTileDestructor(int selfIndex);
 
     void scoreAddAndShow(int variation);
 
@@ -88,7 +94,9 @@ private slots:
 
     void oneTimeUnitPass();
 
-    void tileAnimationImplementation();
+    void tileAniMoveImplementation();
+
+    void tileAniEmergeImplementation();
 
 private:
 
@@ -117,14 +125,16 @@ private:
     int totalTileAmount;
 
     //tile animation properties
-    bool *tileIsActing;
-    int moveTimeTiny,scaleTimeTiny,emergeTimeTiny;//in ms
-    int moveDistanceTiny,scaleDistanceTiny,emergeDistanceTiny;
-    int moveTinyStepAmount,scaleTinyStepAmount,emergeTinyStepAmount;
-
-    QTimer *timerForMove, *timerForScale, *timerForEmerge;
+    bool *isThisIndexGenerateNewTile;
+    int newTileAmount;
+    QGraphicsRectItem *tmpDisplayEmergeTile;
+    int tmpDisplayEmergeTileEdgeLength;
+    QLabel *tmpDisplayEmergeLabel;
+    int tmpDisplayEmergeLabelFontSize;
+    QTimer *timerForMove;
+    QTimer *timerForEmerge;
     QTimer *timerForStopWatch;
-    int counterForMoveStep,counterForStopWatch;
+    int counterForMoveStep,counterForEmergeStep,counterForStopWatch;
 };
 
 #endif // GAMEVIEW_H
