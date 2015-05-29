@@ -15,10 +15,6 @@
 #include "howtoplay.h"
 #include "gameview.h"
 
-//include scenes
-
-
-
 //include sources
 #include "sound.h"
 #include "data.h"
@@ -37,11 +33,10 @@ MainWindow::MainWindow(QWidget *parent) :
     //Initialize gameview
     gameview = NULL;
 
-    //Hide some widgets that didn't wnat to be seen
-    ui->label_logo->lower();
-    ui->pushButton_gameStart->lower();
-    ui->pushButton_settings->lower();
-    ui->pushButton_quitGame->lower();
+
+    //Initialize colorCnt;
+    for(int i=0;i<4;i++)
+        colorCnt[i] = 0;
 
     //Initialize sound object
     sound = new Sound;
@@ -55,6 +50,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //play welcome animation
     QMovie *welcomeAnimation = new QMovie(QString(":/animation/resource/powered_by_Qt.gif"));
     ui->menuBar->setEnabled(false);
+    ui->label_displayBeginAnimation->raise();
     ui->pushButton_skip->raise();
     ui->label_displayBeginAnimation->setMovie(welcomeAnimation);
     welcomeAnimation->start();
@@ -225,3 +221,100 @@ void MainWindow::on_pushButton_quitGame_clicked()
         delete this;
 }
 //slot functions END
+
+void MainWindow::on_pushButton_brushFor2048_2_clicked()
+{
+    w->sound->soundPlay(w->sound->alertCoin);
+    colorCnt[0]++;
+    if(colorCnt[0]>=6)
+        colorCnt[0] = 0;
+
+    switch(colorCnt[0])
+    {
+    case 0:
+        ui->label_2048_2->setStyleSheet("QLabel{background-color : transparent; color : black}");break;
+    case 1:
+        ui->label_2048_2->setStyleSheet("QLabel{background-color : transparent; color : red}");break;
+    case 2:
+        ui->label_2048_2->setStyleSheet("QLabel{background-color : transparent; color : yellow}");break;
+    case 3:
+        ui->label_2048_2->setStyleSheet("QLabel{background-color : transparent; color : green}");break;
+    case 4:
+        ui->label_2048_2->setStyleSheet("QLabel{background-color : transparent; color : blue}");break;
+    case 5:
+        ui->label_2048_2->setStyleSheet("QLabel{background-color : transparent; color : purple}");break;
+    }
+
+}
+
+void MainWindow::on_pushButton_brushFor2048_0_clicked()
+{
+    w->sound->soundPlay(w->sound->alertCoin);
+    colorCnt[1]++;
+    if(colorCnt[1]>=6)
+        colorCnt[1] = 0;
+
+    switch(colorCnt[1])
+    {
+    case 0:
+        ui->label_2048_0->setStyleSheet("QLabel{background-color : transparent; color : black}");break;
+    case 1:
+        ui->label_2048_0->setStyleSheet("QLabel{background-color : transparent; color : red}");break;
+    case 2:
+        ui->label_2048_0->setStyleSheet("QLabel{background-color : transparent; color : yellow}");break;
+    case 3:
+        ui->label_2048_0->setStyleSheet("QLabel{background-color : transparent; color : green}");break;
+    case 4:
+        ui->label_2048_0->setStyleSheet("QLabel{background-color : transparent; color : blue}");break;
+    case 5:
+        ui->label_2048_0->setStyleSheet("QLabel{background-color : transparent; color : purple}");break;
+    }
+}
+
+void MainWindow::on_pushButton_brushFor2048_4_clicked()
+{
+    w->sound->soundPlay(w->sound->alertCoin);
+    colorCnt[2]++;
+    if(colorCnt[2]>=6)
+        colorCnt[2] = 0;
+
+    switch(colorCnt[2])
+    {
+    case 0:
+        ui->label_2048_4->setStyleSheet("QLabel{background-color : transparent; color : black}");break;
+    case 1:
+        ui->label_2048_4->setStyleSheet("QLabel{background-color : transparent; color : red}");break;
+    case 2:
+        ui->label_2048_4->setStyleSheet("QLabel{background-color : transparent; color : yellow}");break;
+    case 3:
+        ui->label_2048_4->setStyleSheet("QLabel{background-color : transparent; color : green}");break;
+    case 4:
+        ui->label_2048_4->setStyleSheet("QLabel{background-color : transparent; color : blue}");break;
+    case 5:
+        ui->label_2048_4->setStyleSheet("QLabel{background-color : transparent; color : purple}");break;
+    }
+}
+
+void MainWindow::on_pushButton_brushFor2048_8_clicked()
+{
+    w->sound->soundPlay(w->sound->alertCoin);
+    colorCnt[3]++;
+    if(colorCnt[3]>=6)
+        colorCnt[3] = 0;
+
+    switch(colorCnt[3])
+    {
+    case 0:
+        ui->label_2048_8->setStyleSheet("QLabel{background-color : transparent; color : black}");break;
+    case 1:
+        ui->label_2048_8->setStyleSheet("QLabel{background-color : transparent; color : red}");break;
+    case 2:
+        ui->label_2048_8->setStyleSheet("QLabel{background-color : transparent; color : yellow}");break;
+    case 3:
+        ui->label_2048_8->setStyleSheet("QLabel{background-color : transparent; color : green}");break;
+    case 4:
+        ui->label_2048_8->setStyleSheet("QLabel{background-color : transparent; color : blue}");break;
+    case 5:
+        ui->label_2048_8->setStyleSheet("QLabel{background-color : transparent; color : purple}");break;
+    }
+}

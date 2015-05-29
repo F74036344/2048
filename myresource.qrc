@@ -24,6 +24,7 @@
         <file>resource/bomb2.png</file>
         <file>resource/skeleton2.png</file>
         <file>resource/deadface.png</file>
+        <file>resource/brush.png</file>
     </qresource>
     <qresource prefix="/sounds">
         <file>resource/game_start.wav</file>
@@ -37,6 +38,7 @@
         <file>resource/gameview_musicHurry.mp3</file>
         <file>resource/gameWin.mp3</file>
         <file>resource/pause.wav</file>
+        <file>resource/coin.wav</file>
     </qresource>
     <qresource prefix="/animation">
         <file>resource/powered_by_Qt.gif</file>

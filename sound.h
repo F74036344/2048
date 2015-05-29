@@ -12,6 +12,7 @@ public:
     Sound();
     ~Sound();
     //sound:Alert
+    QMediaPlayer *alertCoin;
     QMediaPlayer *warningAlert;
     QMediaPlayer *messageAlert;
     QMediaPlayer *pauseAlert;

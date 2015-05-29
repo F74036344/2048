@@ -561,9 +561,12 @@ void GameView::generateTile()   //step 3
 
 
 void GameView::tileAnimation()    //step 4 tile動畫實作
-//動畫效果不如預期....當當的=口=
 {
-    tileAnimationImplementation();
+    keyEventBlock = true;   //Block keyPressEvent during the tile animation
+    //keyEventBlock would be unlocked in the end of step 6
+    counterForMoveStep = 0;
+    connect(timerForMove,SIGNAL(timeout()),this,SLOT(tileAnimationImplementation()));
+    timerForMove->start(10);    //move a tiny step in 15 ms
 }
 
 
@@ -571,26 +574,32 @@ void GameView::tileAnimation()    //step 4 tile動畫實作
 
 
 
-int GameView::checkIfAnyTileReachGoal()    //step 5:檢查是否有tile的value已到達目標
+void GameView::checkIfAnyTileReachGoal()    //step 5:檢查是否有tile的value已到達目標
 {
+    bool gameIsWin = false;
     for(int i=0;i<power(boardEdgeSize,2);i++)
     {
-
-        if(*(currentValueOfTile+i) !=  0)
+        if( *(currentValueOfTile+i) >= goal)
         {
-            if( *(currentValueOfTile) >= goal)
-            {
-                gameWin();
-                break;
+            gameIsWin = true;
+            break;
 
-            }
         }
     }
-       qDebug() << "Step5:checkIfAnyTileReachGoal done";
-    return 0;
+           qDebug() << "Step5:checkIfAnyTileReachGoal done";
+    if(gameIsWin)
+    {
+                gameWin();  //如果已有tile的值已達到目標，則執行gameWin()
+    }
+    else
+    {
+               checkIfAnyTileIsMovable();	//如果還沒贏，則進入step6:檢查還有沒有可以動的*tile
+
+    }
+
 }
 
-int GameView::checkIfAnyTileIsMovable()    //step 6:檢查還有沒有可以動的tile
+void GameView::checkIfAnyTileIsMovable()    //step 6:檢查還有沒有可以動的tile
 {
     //檢查是否所有*tile皆已不能動
        bool allTileCanNotMove = true;
@@ -599,17 +608,42 @@ int GameView::checkIfAnyTileIsMovable()    //step 6:檢查還有沒有可以動�
        for(int row=0;row<boardEdgeSize;row++)
            for(int col=0;col<boardEdgeSize;col++)
            {
+               //向左檢查
+               if(col-1<0)	//如果左邊沒東西就不用檢查
+                   ;//do nothing
+               else
+               {
+                   //如果左邊是空的tile，就把allTileCanNotMove設為false
+                   if(*(currentValueOfTile+(col-1)+row*boardEdgeSize)==0)  //Available
+                       allTileCanNotMove =  false;
+
+                   //如果左邊是和自己相同value的tile，就把allTileCanNotMove設為false
+                   else if((*(currentValueOfTile+col+row*boardEdgeSize))==(*(currentValueOfTile+(col-1)+row*boardEdgeSize)))
+                       allTileCanNotMove = false;
+               }
                //向右檢查
                if(col+1>=boardEdgeSize)	//如果右邊沒東西就不用檢查
                    ;//do nothing
                else
                {
-                   //如果有空的tile，就把allTileCanNotMove設為false
+                   //如果右邊是空的tile，就把allTileCanNotMove設為false
                    if(*(currentValueOfTile+(col+1)+row*boardEdgeSize)==0)  //Available
                        allTileCanNotMove =  false;
 
-                   //如果有相同value的，就把allTileCanNotMove設為false
+                   //如果右邊是和自己相同value的tile，就把allTileCanNotMove設為false
                    else if((*(currentValueOfTile+col+row*boardEdgeSize))==(*(currentValueOfTile+(col+1)+row*boardEdgeSize)))
+                       allTileCanNotMove = false;
+               }
+               //向上檢查
+               if(row-1<0)	//如果上面沒東西就不用檢查
+                   ;//do nothing
+               else
+               {
+                   //如果上面是空的tile，就把allTileCanNotMove設為false
+                   if(*(currentValueOfTile+col+(row-1)*boardEdgeSize)==0)  //Available
+                       allTileCanNotMove = false;
+                   //如果上面是和自己相同value的tile，就把allTileCanNotMove設為false
+                   else if((*(currentValueOfTile+col+row*boardEdgeSize))==(*(currentValueOfTile+col+(row-1)*boardEdgeSize)))
                        allTileCanNotMove = false;
                }
                //向下檢查
@@ -617,10 +651,10 @@ int GameView::checkIfAnyTileIsMovable()    //step 6:檢查還有沒有可以動�
                    ;//do nothing
                else
                {
-                   //如果有空的tile，就把allTileCanNotMove設為false
+                   //如果下面是空的tile，就把allTileCanNotMove設為false
                    if(*(currentValueOfTile+col+(row+1)*boardEdgeSize)==0)  //Available
                        allTileCanNotMove = false;
-                   //如果有相同value的，就把allTileCanNotMove設為false
+                   //如果下面是相同value的tile，就把allTileCanNotMove設為false
                    else if((*(currentValueOfTile+col+row*boardEdgeSize))==(*(currentValueOfTile+col+(row+1)*boardEdgeSize)))
                        allTileCanNotMove = false;
                }
@@ -632,7 +666,9 @@ int GameView::checkIfAnyTileIsMovable()    //step 6:檢查還有沒有可以動�
            //如果所有*tile皆不能動，則gameOver
            gameOver();
        }
-       //如果還有tile能動的話，則沒有動作退出此函式，等待下一次的keyPressEvent
+       //如果還有tile能動的話，則解除對keyPressEvent的block並退出此函式，等待下一次的keyPressEvent
+       else
+            keyEventBlock = false;
 
        /*qDebug()<<"nextPosOfTile";
        for(int i=0;i<boardEdgeSize;i++)
@@ -644,7 +680,7 @@ int GameView::checkIfAnyTileIsMovable()    //step 6:檢查還有沒有可以動�
                   <<" "<<*(nextValueOfTile+i*boardEdgeSize+2)<<" "<<*(nextValueOfTile+i*boardEdgeSize+3);*/
 
        qDebug() << "Step6:checkIfAnyTileMovable done";
-       return 0;
+
 }
 
 
@@ -856,6 +892,76 @@ void GameView::oneTimeUnitPass()
 
 void GameView::tileAnimationImplementation()
 {
+    int moveUnit = 5;   //in pixel
+    int index;
+    //根據nextPosOfTile和currentValueOfTile做出tile動畫
+    //在動畫完成後，根據nextValueOfTile建立新的tile
+    for(int row=0;row<boardEdgeSize;row++)
+        for(int col=0;col<boardEdgeSize;col++)
+        {
+            index = col + row*boardEdgeSize;
+            if((*(nextPosOfTile+index))==-1)    //-1 means not to move
+                ;   //do nothing
+            else if(*(tile+col+row*boardEdgeSize)==NULL)
+                ;   //do nothing
+            else
+            {
+                int posDifference = *(nextPosOfTile+index)-index;   //nextPos-currentPos
+                int displacement;   //unit:block
+                if(posDifference/boardEdgeSize < 0)    //move up
+                {
+                    displacement = posDifference/boardEdgeSize;
+                    (*(tile+col+row*boardEdgeSize))->setPos((*(tile+col+row*boardEdgeSize))->x(),
+                                                            (*(tile+col+row*boardEdgeSize))->y()+displacement*moveUnit);
+                    (*(label_demoValue+col+row*boardEdgeSize))->setGeometry((*(label_demoValue+col+row*boardEdgeSize))->x(),
+                                                                            (*(label_demoValue+col+row*boardEdgeSize))->y()+displacement*moveUnit,
+                                                                            tileEdgeLength,
+                                                                            tileEdgeLength);
+
+                }
+                else if(posDifference/boardEdgeSize > 0) //move down
+                {
+                    displacement = posDifference/boardEdgeSize;
+                    (*(tile+col+row*boardEdgeSize))->setPos((*(tile+col+row*boardEdgeSize))->x(),
+                                                            (*(tile+col+row*boardEdgeSize))->y()+displacement*moveUnit);
+                    (*(label_demoValue+col+row*boardEdgeSize))->setGeometry((*(label_demoValue+col+row*boardEdgeSize))->x(),
+                                                                            (*(label_demoValue+col+row*boardEdgeSize))->y()+displacement*moveUnit,
+                                                                            tileEdgeLength,
+                                                                            tileEdgeLength);
+
+                }
+                else if(posDifference/boardEdgeSize == 0)
+                {
+                    if(posDifference%boardEdgeSize < 0)  //move left
+                    {
+                        displacement = posDifference%boardEdgeSize;
+                        (*(tile+col+row*boardEdgeSize))->setPos((*(tile+col+row*boardEdgeSize))->x()+displacement*moveUnit,
+                                                                (*(tile+col+row*boardEdgeSize))->y());
+                        (*(label_demoValue+col+row*boardEdgeSize))->setGeometry((*(label_demoValue+col+row*boardEdgeSize))->x()+displacement*moveUnit,
+                                                                                (*(label_demoValue+col+row*boardEdgeSize))->y(),
+                                                                                tileEdgeLength,
+                                                                                tileEdgeLength);
+                    }
+                    else if(posDifference%boardEdgeSize > 0) //move right
+                    {
+                        displacement = posDifference%boardEdgeSize;
+                        (*(tile+col+row*boardEdgeSize))->setPos((*(tile+col+row*boardEdgeSize))->x()+displacement*moveUnit,
+                                                                (*(tile+col+row*boardEdgeSize))->y());
+                        (*(label_demoValue+col+row*boardEdgeSize))->setGeometry((*(label_demoValue+col+row*boardEdgeSize))->x()+displacement*moveUnit,
+                                                                                (*(label_demoValue+col+row*boardEdgeSize))->y(),
+                                                                                tileEdgeLength,
+                                                                                tileEdgeLength);
+                    }
+                }
+
+            }
+
+        }
+    counterForMoveStep++;
+    if(counterForMoveStep >= 17)    //finish the animation  //17(moveStepAmount)*15(each step cost time)=255
+    {
+        timerForMove->stop();
+        disconnect(timerForMove,SIGNAL(timeout()),this,SLOT(tileAnimationImplementation()));
         /*for(int i=0;i<power(boardEdgeSize,2);i++) //delete all tile
             tileDestructor(i);*/
         for(int i=0;i<power(boardEdgeSize,2);i++) //construct all tile based on nextValueOfTile
@@ -869,15 +975,14 @@ void GameView::tileAnimationImplementation()
             else
                 tileDestructor(i);
         }
-        keyEventBlock = false;  //stop blocking keyPressEvent
 
         //動畫實作完畢，可以將currentValueOfTile用nextValueOfTile覆蓋過去了
         for(int i=0;i<power(boardEdgeSize,2);i++)
             *(currentValueOfTile+i) = *(nextValueOfTile+i);
         qDebug() << "Step4:tileAnimation done";
         checkIfAnyTileReachGoal();  //進入step5
-        checkIfAnyTileIsMovable();	//進入step6:檢查還有沒有可以動的*tile
 
+    }
 
 }
 
@@ -930,7 +1035,7 @@ void GameView::gameOver()
     w->sound->soundBgMusicPlay_stop();
     w->sound->soundPlay(w->sound->gameOverMusic);
     timerForStopWatch->stop();
-    keyEventBlock = true;
+    keyEventBlock = true;   //Block all the keyPressEvent when gameOver
     isGamePaused = false;
     if(gameStatusLabel == NULL)
         gameStatusLabelCreator();
@@ -951,7 +1056,8 @@ void GameView::gameWin()
     w->sound->soundBgMusicPlay_stop();
     w->sound->soundPlay(w->sound->gameWinMusic);
     timerForStopWatch->stop();
-    keyEventBlock = true;
+    keyEventBlock = true;   //Block all the keyPressEvent when gameWin
+    isGamePaused = false;
     if(gameStatusLabel == NULL)
         gameStatusLabelCreator();
     gameStatusLabel->setText("You Win The Game\n\\^o^/");

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>641</width>
-    <height>423</height>
+    <height>445</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -58,7 +58,7 @@
            <item>
             <widget class="QRadioButton" name="radioButton_1">
              <property name="text">
-              <string>128</string>
+              <string>64</string>
              </property>
              <attribute name="buttonGroup">
               <string notr="true">buttonGroup</string>
@@ -68,7 +68,7 @@
            <item>
             <widget class="QRadioButton" name="radioButton_2">
              <property name="text">
-              <string>256</string>
+              <string>128</string>
              </property>
              <attribute name="buttonGroup">
               <string notr="true">buttonGroup</string>
@@ -82,7 +82,7 @@
            <item>
             <widget class="QRadioButton" name="radioButton_3">
              <property name="text">
-              <string>512</string>
+              <string>256</string>
              </property>
              <attribute name="buttonGroup">
               <string notr="true">buttonGroup</string>
@@ -92,7 +92,7 @@
            <item>
             <widget class="QRadioButton" name="radioButton_4">
              <property name="text">
-              <string>1024</string>
+              <string>512</string>
              </property>
              <attribute name="buttonGroup">
               <string notr="true">buttonGroup</string>
@@ -106,7 +106,7 @@
            <item>
             <widget class="QRadioButton" name="radioButton_5">
              <property name="text">
-              <string>2048</string>
+              <string>1024</string>
              </property>
              <property name="checked">
               <bool>true</bool>
@@ -119,7 +119,7 @@
            <item>
             <widget class="QRadioButton" name="radioButton_6">
              <property name="text">
-              <string>4096</string>
+              <string>2048</string>
              </property>
              <attribute name="buttonGroup">
               <string notr="true">buttonGroup</string>
@@ -129,14 +129,25 @@
           </layout>
          </item>
          <item>
-          <widget class="QRadioButton" name="radioButton_XD">
-           <property name="text">
-            <string>4(XD</string>
-           </property>
-           <attribute name="buttonGroup">
-            <string notr="true">buttonGroup</string>
-           </attribute>
-          </widget>
+          <layout class="QHBoxLayout" name="horizontalLayout_9">
+           <item>
+            <widget class="QRadioButton" name="radioButton_7">
+             <property name="text">
+              <string>4096</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="radioButton_XD">
+             <property name="text">
+              <string>4(XD</string>
+             </property>
+             <attribute name="buttonGroup">
+              <string notr="true">buttonGroup</string>
+             </attribute>
+            </widget>
+           </item>
+          </layout>
          </item>
         </layout>
        </item>
@@ -436,7 +447,7 @@
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="buttonGroup_2"/>
   <buttongroup name="buttonGroup"/>
+  <buttongroup name="buttonGroup_2"/>
  </buttongroups>
 </ui>

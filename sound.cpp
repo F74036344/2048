@@ -8,6 +8,7 @@ Sound::Sound()
     warningAlert = new QMediaPlayer(this);
     messageAlert = new QMediaPlayer(this);
     pauseAlert = new QMediaPlayer(this);
+    alertCoin = new QMediaPlayer(this);
     //sound:music:initialize
     welcomeMusic = new QMediaPlayer(this);
     gameStartMusic = new QMediaPlayer(this);
@@ -22,6 +23,7 @@ Sound::Sound()
     warningAlert->setMedia(QUrl(QString("qrc:/sounds/resource/warning.wav")));
     messageAlert->setMedia(QUrl(QString("qrc:/sounds/resource/warning.wav")));
     pauseAlert->setMedia(QUrl(QString("qrc:/sounds/resource/pause.wav")));
+    alertCoin->setMedia(QUrl(QString("qrc:/sounds/resource/coin.wav")));
     //sound:music:setMedia
     welcomeMusic->setMedia(QUrl(QString("qrc:/sounds/resource/game_start.wav")));
     gameStartMusic->setMedia(QUrl(QString("qrc:/sounds/resource/game_start.wav")));

@@ -39,8 +39,8 @@ public:
 
     void generateTile();	//generate tile
     void tileAnimation();
-    int checkIfAnyTileReachGoal(); //Check if any *tile's value reaches the goal. If is, then gameWin
-    int checkIfAnyTileIsMovable();	//Check if all tiles are unmovable.If are, then gameOver
+    void checkIfAnyTileReachGoal(); //Check if any *tile's value reaches the goal. If is, then gameWin
+    void checkIfAnyTileIsMovable();	//Check if all tiles are unmovable.If are, then gameOver
 
 
     void tileCreator(int index,int value);

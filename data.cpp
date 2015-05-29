@@ -5,7 +5,7 @@ Data::Data()
 {
     //set default value
     setBoardEdgeSizeIndexValue(0);
-    setWhichGoalButtonChecked(5);
+    setWhichGoalButtonChecked(6);
     setTileGenerateAmountIndex(0);
     setWhichTileColorButtonChecked(QString("default"));
     setTimeLimitIsChecked(false);
@@ -20,10 +20,10 @@ Data::~Data()
 //get value functions
 int Data::getGoalValue()
 {
-    if(getWhichGoalButtonChecked()==7)
+    if(getWhichGoalButtonChecked()==8)  //ratioButton_XD
         return 4;
     else
-        return power(2,getWhichGoalButtonChecked()+6);
+        return power(2,getWhichGoalButtonChecked()+5);
 }
 int Data::getWhichGoalButtonChecked()
 {
