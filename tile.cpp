@@ -43,7 +43,7 @@ Tile::Tile(int row,int col,int current_value)
     font.setPointSize(32);
     font.setBold(true);
     label_demoValue->setFont(font);
-    if(w->data->getTileColor() == QColor(Qt::white))
+    if(w->data->getTileColor() == QString("white"))
         label_demoValue->setStyleSheet("QLabel{background-color : transparent ;color : black}");
     else
         label_demoValue->setStyleSheet("QLabel{background-color : transparent ;color : white}");

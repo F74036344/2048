@@ -44,8 +44,8 @@ public:
 
 
     void tileCreator(int index,int value);
-        void tileTextCreator(int,int);
-        void tileRectCreator(int);
+        void tileTextCreator(int index,int value);
+        void tileRectCreator(int index,int value);
     void tileDestructor(int value);
 
     void scoreAddAndShow(int variation);
@@ -53,8 +53,8 @@ public:
     void gameStatusLabelCreator();
     void gameStatusLabelDestructor();
 
-    void setTileColor(QColor);
-    QColor getTileColor();
+    void setTileColor(QString color);
+    QColor getTileColor(int tileValue);
 
     void setStopWatchValueAndShow(int totalSecond);
 
@@ -110,7 +110,7 @@ private:
 
     //tile properties
     int tileEdgeLength,gameAreaEdgeLength,gap;
-    QColor tileColor;
+    QString tileColor;
     int *currentValueOfTile,*nextValueOfTile,*nextPosOfTile;   //為了做tile動畫，所以需要兩個array分別存移動前，移動後tile之位置與值
     int score;
 

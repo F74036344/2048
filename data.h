@@ -18,8 +18,8 @@ public:
     bool isTimeLimitChecked();
     int getTimeLimitValue();
     QString getWhichTileColorButtonChecked();
-    QColor getTileColor();
-    QColor getTileTextColor();
+    QString getTileColor();
+    QString getTileTextColor();
 
     void setGoalValue(int);
     void setWhichGoalButtonChecked(int);

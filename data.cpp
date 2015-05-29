@@ -67,7 +67,7 @@ QString Data::getWhichTileColorButtonChecked()
     return whichTileColorButtonChecked;
 }
 
-QColor Data::getTileColor()
+QString Data::getTileColor()
 {
     if(getWhichTileColorButtonChecked() == QString("random"))
     {
@@ -78,56 +78,56 @@ QColor Data::getTileColor()
         {
             case 0: //default color(white)
                 tileColorIsWhite = true;
-                return QColor(Qt::white);
+                return QString("white");
             case 1: //red
                 tileColorIsWhite = false;
-                return QColor(Qt::red);
+                return QString("red");
             case 2: //yellow
                 tileColorIsWhite = false;
-                return QColor(0xff,0xcc,0x22);
+                return QString("yellow");
             case 3: //green
                 tileColorIsWhite = false;
-                return QColor(0x00,0x88,0x00);
+                return QString("green");
             case 4: //blue
                 tileColorIsWhite = false;
-                return QColor(Qt::blue);
+                return QString("blue");
             case 5: //purple
                 tileColorIsWhite = false;
-                return QColor(0x77,0x00,0xbb);
+                return QString("purple");
             case 6:
                 tileColorIsWhite = false;
-                return QColor(Qt::black);
+                return QString("black");
         }
     }
     else if(getWhichTileColorButtonChecked() == QString("default"))
     {
         tileColorIsWhite = true;
-        return QColor(Qt::white);
+        return QString("white");
     }
     else
     {
         tileColorIsWhite = false;
         if(getWhichTileColorButtonChecked() == QString("black"))
-            return QColor(Qt::black);
+            return QString("black");
         else if(getWhichTileColorButtonChecked() == QString("red"))
-            return QColor(Qt::red);
+            return QString("red");
         else if(getWhichTileColorButtonChecked() == QString("yellow"))
-            return QColor(0xff,0xcc,0x22);    //感覺Qt的yellow太亮，所以自己上網找的個比較不黃的XD
+            return QString("yellow");
         else if(getWhichTileColorButtonChecked() == QString("green"))
-            return QColor(0x00,0x88,0x00);      //感覺Qt的green太亮，自己找了個比較不亮的
+            return QString("green");
         else if(getWhichTileColorButtonChecked() == QString("blue"))
-            return QColor(Qt::blue);
+            return QString("blue");
         else if(getWhichTileColorButtonChecked() == QString("purple"))
-            return QColor(0x77,0x00,0xbb);    //Qt has no purple color ~"~, so it needs to be set manually
+            return QString("purple");
     }
 }
 
-QColor Data::getTileTextColor()
+QString Data::getTileTextColor()
 {
     if(tileColorIsWhite)
-        return QColor(Qt::black);
+        return QString("black");
     else
-        return QColor(Qt::white);
+        return QString("white");
 }
 
 

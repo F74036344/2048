@@ -183,7 +183,7 @@ GameView::GameView(QWidget *parent) :
     gameAreaFrame.setRect(0,0,
             (gap+tileEdgeLength)*(w->data->getBoardEdgeSizeValue())+gap-3,
             (gap+tileEdgeLength)*(w->data->getBoardEdgeSizeValue())+gap-3);
-    gameAreaFrame.setPen(QPen(getTileColor(),3));
+    gameAreaFrame.setPen(QPen(getTileColor(power(2,2)),3));
     gameAreaFrame.setBrush(Qt::transparent);
     //setFlag(QGraphicsItem::ItemIsFocusable);
     //setFocus();
@@ -653,7 +653,7 @@ void GameView::tileCreator(int index,int value)
 {
     //1.建置label_demoValue's value、position
     //2.刷新tile's rect's position
-    tileRectCreator(index);
+    tileRectCreator(index,value);
     tileTextCreator(index,value);
 }
 
@@ -674,7 +674,7 @@ void GameView::tileTextCreator(int index,int value)
         font.setPointSize(32);
     font.setBold(true);
     (*(label_demoValue+index))->setFont(font);
-    if(getTileColor()==QColor(Qt::white))
+    if(tileColor==QString("white"))
         (*(label_demoValue+index))->setStyleSheet("QLabel{background-color : transparent ; color : black}");
     else
         (*(label_demoValue+index))->setStyleSheet("QLabel{background-color : transparent ; color : white}");
@@ -682,7 +682,7 @@ void GameView::tileTextCreator(int index,int value)
     gameAreaScene->addWidget((*(label_demoValue+index)));
 }
 
-void GameView::tileRectCreator(int index)
+void GameView::tileRectCreator(int index,int value)
 {
     int row = index/boardEdgeSize;
     int col = index%boardEdgeSize;
@@ -690,11 +690,11 @@ void GameView::tileRectCreator(int index)
     (*(tile+index))->setRect(0,0,tileEdgeLength,tileEdgeLength);
     (*(tile+index))->setPos(gap+(gap+tileEdgeLength)*col,gap+(gap+tileEdgeLength)*row);
     //依照tileColor來決定pen(外框)的顏色
-    if(getTileColor() == QColor(Qt::white))
+    if(tileColor == QString("white"))
         (*(tile+index))->setPen(QPen(Qt::black,3));
     else
-        (*(tile+index))->setPen(QPen(getTileColor(),1));
-    (*(tile+index))->setBrush(getTileColor());
+        (*(tile+index))->setPen(QPen(getTileColor(value),1));
+    (*(tile+index))->setBrush(getTileColor(value));
     gameAreaScene->addItem((*(tile+index)));
 }
 
@@ -729,13 +729,76 @@ void GameView::gameStatusLabelDestructor()
     gameStatusLabel = NULL;
 }
 
-void GameView::setTileColor(QColor color)
+void GameView::setTileColor(QString color)
 {
     tileColor = color;
 }
 
-QColor GameView::getTileColor()
+QColor GameView::getTileColor(int tileValue)
 {
+    QColor color[5];    //5levels of tile
+    if(tileColor == QString("white"))
+    {
+        return QColor(Qt::white);
+    }
+    else if(tileColor == QString("red"))
+    {
+        color[0] = QColor(0xff,0x88,0x88);    //index higher, color darker
+        color[1] = QColor(0xff,0x33,0x33);
+        color[2] = QColor(0xff,0x00,0x00);
+        color[3] = QColor(0xcc,0x00,0x00);
+        color[4] = QColor(0x88,0x00,0x00);
+    }
+    else if(tileColor == QString("yellow"))
+    {
+        color[0] = QColor(0xff,0xdd,0x55);    //index higher, color darker
+        color[1] = QColor(0xff,0xbb,0x00);
+        color[2] = QColor(0xff,0x88,0x00);
+        color[3] = QColor(0xbb,0x55,0x00);
+        color[4] = QColor(0x88,0x66,0x00);
+    }
+    else if(tileColor == QString("green"))
+    {
+        color[0] = QColor(0x66,0xff,0x66);    //index higher, color darker
+        color[1] = QColor(0x00,0xdd,0x00);
+        color[2] = QColor(0x00,0xaa,0x00);
+        color[3] = QColor(0x00,0x88,0x00);
+        color[4] = QColor(0x22,0x77,0x00);
+    }
+    else if(tileColor == QString("blue"))
+    {
+        color[0] = QColor(0x00,0xff,0xff);    //index higher, color darker
+        color[1] = QColor(0x00,0xbb,0xff);
+        color[2] = QColor(0x00,0x66,0xff);
+        color[3] = QColor(0x00,0x44,0xbb);
+        color[4] = QColor(0x00,0x00,0xcc);
+    }
+    else if(tileColor == QString("purple"))
+    {
+        color[0] = QColor(0xff,0xb3,0xff);    //index higher, color darker
+        color[1] = QColor(0xff,0x3e,0xff);
+        color[2] = QColor(0xcc,0x00,0xff);
+        color[3] = QColor(0x77,0x00,0xbb);
+        color[4] = QColor(0x3a,0x00,0x88);
+    }
+    else if(tileColor == QString("black"))
+    {
+        color[0] = QColor(0x00,0x00,0x00);    //index higher, color brighter
+        color[1] = QColor(0x22,0x22,0x22);
+        color[2] = QColor(0x44,0x44,0x44);
+        color[3] = QColor(0x66,0x66,0x66);
+        color[4] = QColor(0x88,0x88,0x88);
+    }
+    int k=1;
+    while(1)
+    {
+        if(power(2,k) == tileValue)
+        {
+            return color[(k-1)%5];
+        }
+        k++;
+    }
+
     return tileColor;
 }
 
