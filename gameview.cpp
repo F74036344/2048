@@ -862,10 +862,10 @@ QColor GameView::getTileColor(int tileValue)
     else if(tileColor == QString("black"))
     {
         color[0] = QColor(0x00,0x00,0x00);    //index higher, color brighter
-        color[1] = QColor(0x22,0x22,0x22);
-        color[2] = QColor(0x44,0x44,0x44);
-        color[3] = QColor(0x66,0x66,0x66);
-        color[4] = QColor(0x88,0x88,0x88);
+        color[1] = QColor(0x44,0x44,0x44);
+        color[2] = QColor(0x88,0x88,0x88);
+        color[3] = QColor(0xaa,0xaa,0xaa);
+        color[4] = QColor(0xdd,0xdd,0xdd);
     }
     int k=1;
     while(1)
@@ -1160,13 +1160,14 @@ void GameView::gameOver()
     if(gameStatusLabel == NULL)
         gameStatusLabelCreator();
     gameStatusLabel->setText("Game Over\n(oДo)\"");
-    gameStatusLabel->setStyleSheet("QLabel{background-color : QColor(0,0,0,70) ; color : red}");
+    gameStatusLabel->setStyleSheet("QLabel{background-color : rgba(0,0,0,100) ; color : red}");
 
     gameAreaScene->addWidget(gameStatusLabel);
     ui->pushButton_restartTheGame->setGeometry(controlPanelWidth+gap+(gap+tileEdgeLength)*(boardEdgeSize/2.0-0.75),
                                                gap+(gap+tileEdgeLength)*(boardEdgeSize/2.0+0.8),
                                                gap+tileEdgeLength*1.5,
                                                40);
+    ui->pushButton_restartTheGame->setStyleSheet("QPushButton{background-color : rgba(255,255,255,200)}");
     ui->pushButton_pause->setEnabled(false);
     ui->pushButton_quiet->setEnabled(false);
 }
@@ -1181,12 +1182,13 @@ void GameView::gameWin()
     if(gameStatusLabel == NULL)
         gameStatusLabelCreator();
     gameStatusLabel->setText("You Win The Game\n\\^o^/");
-    gameStatusLabel->setStyleSheet("QLabel{background-color : QColor(0,0,0,50) ; color : white}");
+    gameStatusLabel->setStyleSheet("QLabel{background-color : rgba(255,200,0,100) ; color : white}");
     gameAreaScene->addWidget(gameStatusLabel);
     ui->pushButton_restartTheGame->setGeometry(controlPanelWidth+gap+(gap+tileEdgeLength)*(boardEdgeSize/2.0-0.75),
                                                gap+(gap+tileEdgeLength)*(boardEdgeSize/2.0+0.8),
                                                gap+tileEdgeLength*1.5,
                                                40);
+    ui->pushButton_restartTheGame->setStyleSheet("QPushButton{background-color : rgba(255,255,255,200)}");
     ui->pushButton_pause->setEnabled(false);
     ui->pushButton_quiet->setEnabled(false);
 }

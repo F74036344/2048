@@ -242,7 +242,7 @@ void MainWindow::on_pushButton_brushFor2048_2_clicked()
     case 4:
         ui->label_2048_2->setStyleSheet("QLabel{background-color : transparent; color : blue}");break;
     case 5:
-        ui->label_2048_2->setStyleSheet("QLabel{background-color : transparent; color : purple}");break;
+        ui->label_2048_2->setStyleSheet("QLabel{background-color : transparent; color : pink}");break;
     }
 
 }
@@ -267,7 +267,7 @@ void MainWindow::on_pushButton_brushFor2048_0_clicked()
     case 4:
         ui->label_2048_0->setStyleSheet("QLabel{background-color : transparent; color : blue}");break;
     case 5:
-        ui->label_2048_0->setStyleSheet("QLabel{background-color : transparent; color : purple}");break;
+        ui->label_2048_0->setStyleSheet("QLabel{background-color : transparent; color : pink}");break;
     }
 }
 
@@ -291,7 +291,7 @@ void MainWindow::on_pushButton_brushFor2048_4_clicked()
     case 4:
         ui->label_2048_4->setStyleSheet("QLabel{background-color : transparent; color : blue}");break;
     case 5:
-        ui->label_2048_4->setStyleSheet("QLabel{background-color : transparent; color : purple}");break;
+        ui->label_2048_4->setStyleSheet("QLabel{background-color : transparent; color : pink}");break;
     }
 }
 
@@ -315,6 +315,6 @@ void MainWindow::on_pushButton_brushFor2048_8_clicked()
     case 4:
         ui->label_2048_8->setStyleSheet("QLabel{background-color : transparent; color : blue}");break;
     case 5:
-        ui->label_2048_8->setStyleSheet("QLabel{background-color : transparent; color : purple}");break;
+        ui->label_2048_8->setStyleSheet("QLabel{background-color : transparent; color : pink}");break;
     }
 }

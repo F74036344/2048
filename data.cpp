@@ -7,9 +7,9 @@ Data::Data()
     setBoardEdgeSizeIndexValue(0);
     setWhichGoalButtonChecked(6);
     setTileGenerateAmountIndex(0);
-    setWhichTileColorButtonChecked(QString("default"));
+    setWhichTileColorButtonChecked(QString("random"));
     setTimeLimitIsChecked(false);
-    setTimeLimitValue(300);
+    setTimeLimitValue(600);
 }
 
 Data::~Data()
