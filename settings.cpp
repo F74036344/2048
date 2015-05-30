@@ -40,8 +40,8 @@ settings::settings(QWidget *parent) :
         ui->radioButton_XD->setChecked(true);
 
     //Read radioButton imformation(tileColor information)from data
-    if(w->data->getWhichTileColorButtonChecked() == QString("default"))
-        ui->radioButton_defaultColor->setChecked(true);
+    if(w->data->getWhichTileColorButtonChecked() == QString("white"))
+        ui->radioButton_whiteColor->setChecked(true);
     else if(w->data->getWhichTileColorButtonChecked() == QString("random"))
         ui->radioButton_randomColor->setChecked(true);
     else if(w->data->getWhichTileColorButtonChecked() == QString("black"))
@@ -113,8 +113,8 @@ void settings::on_pushButton_Ok_clicked()
         w->data->setWhichGoalButtonChecked(8);
 
     //Save tileColor information to data
-    if(ui->radioButton_defaultColor->isChecked())
-        w->data->setWhichTileColorButtonChecked(QString("default"));
+    if(ui->radioButton_whiteColor->isChecked())
+        w->data->setWhichTileColorButtonChecked(QString("white"));
     else if(ui->radioButton_randomColor->isChecked())
         w->data->setWhichTileColorButtonChecked(QString("random"));
     else if(ui->radioButton_black->isChecked())

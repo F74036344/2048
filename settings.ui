@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>Settings</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="myresource.qrc">
+    <normaloff>:/images/resource/setting_icon.png</normaloff>:/images/resource/setting_icon.png</iconset>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_5">
@@ -295,9 +299,9 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_8">
          <item>
-          <widget class="QRadioButton" name="radioButton_defaultColor">
+          <widget class="QRadioButton" name="radioButton_whiteColor">
            <property name="text">
-            <string>Default(White)</string>
+            <string>White</string>
            </property>
            <attribute name="buttonGroup">
             <string notr="true">buttonGroup_2</string>
@@ -434,6 +438,10 @@
        <property name="text">
         <string>Ok</string>
        </property>
+       <property name="icon">
+        <iconset resource="myresource.qrc">
+         <normaloff>:/images/resource/tick.png</normaloff>:/images/resource/tick.png</iconset>
+       </property>
       </widget>
      </item>
      <item>
@@ -447,10 +455,12 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="myresource.qrc"/>
+ </resources>
  <connections/>
  <buttongroups>
-  <buttongroup name="buttonGroup_2"/>
   <buttongroup name="buttonGroup"/>
+  <buttongroup name="buttonGroup_2"/>
  </buttongroups>
 </ui>

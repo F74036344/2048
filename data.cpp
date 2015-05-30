@@ -7,7 +7,7 @@ Data::Data()
     setBoardEdgeSizeIndexValue(0);
     setWhichGoalButtonChecked(6);
     setTileGenerateAmountIndex(0);
-    setWhichTileColorButtonChecked(QString("random"));
+    setWhichTileColorButtonChecked(QString("random"));  //default color is random
     setTimeLimitIsChecked(false);
     setTimeLimitValue(600);
 }
@@ -99,7 +99,7 @@ QString Data::getTileColor()
                 return QString("black");
         }
     }
-    else if(getWhichTileColorButtonChecked() == QString("default"))
+    else if(getWhichTileColorButtonChecked() == QString("white"))
     {
         tileColorIsWhite = true;
         return QString("white");

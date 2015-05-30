@@ -25,6 +25,7 @@
         <file>resource/skeleton2.png</file>
         <file>resource/deadface.png</file>
         <file>resource/brush.png</file>
+        <file>resource/tick.png</file>
     </qresource>
     <qresource prefix="/sounds">
         <file>resource/game_start.wav</file>

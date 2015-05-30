@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>How to play this game</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="myresource.qrc">
+    <normaloff>:/images/resource/help2.png</normaloff>:/images/resource/help2.png</iconset>
+  </property>
   <widget class="QTextBrowser" name="textBrowser">
    <property name="geometry">
     <rect>
@@ -87,7 +91,9 @@ p, li { white-space: pre-wrap; }
    </property>
   </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="myresource.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>pushButton_know</sender>

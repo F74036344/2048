@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>What is 2048?</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="myresource.qrc">
+    <normaloff>:/images/resource/Help1.png</normaloff>:/images/resource/Help1.png</iconset>
+  </property>
   <widget class="QTextBrowser" name="textBrowser">
    <property name="geometry">
     <rect>
@@ -93,7 +97,9 @@ p, li { white-space: pre-wrap; }
    </property>
   </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="myresource.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>pushButton_know</sender>

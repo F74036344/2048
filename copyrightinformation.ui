@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>Information</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="myresource.qrc">
+    <normaloff>:/images/resource/info.png</normaloff>:/images/resource/info.png</iconset>
+  </property>
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
@@ -79,7 +83,9 @@
    </property>
   </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="myresource.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>pushButton</sender>

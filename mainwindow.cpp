@@ -215,7 +215,7 @@ void MainWindow::on_pushButton_quitGame_clicked()
 {
     QMessageBox::StandardButton reply;
     sound->soundPlay(sound->warningAlert);
-    reply = QMessageBox::question(this,"Quit request","Do you really want to quit?",
+    reply = QMessageBox::question(this,"Quit Request","Do you really want to quit?",
                           QMessageBox::Yes | QMessageBox::No);
     if(reply==QMessageBox::Yes)
         delete this;

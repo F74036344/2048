@@ -17,8 +17,8 @@
    <string>2048</string>
   </property>
   <property name="windowIcon">
-   <iconset>
-    <normaloff>resource/2048.png</normaloff>resource/2048.png</iconset>
+   <iconset resource="myresource.qrc">
+    <normaloff>:/images/resource/2048.png</normaloff>:/images/resource/2048.png</iconset>
   </property>
   <widget class="QLabel" name="label_scoreText">
    <property name="geometry">
@@ -249,6 +249,32 @@
    </property>
    <property name="text">
     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; color:#00aa00;&quot;&gt;∞&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_bgPicture">
+   <property name="geometry">
+    <rect>
+     <x>290</x>
+     <y>30</y>
+     <width>91</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_bgMask">
+   <property name="geometry">
+    <rect>
+     <x>390</x>
+     <y>30</y>
+     <width>91</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
    </property>
   </widget>
  </widget>
