@@ -22,7 +22,6 @@ SOURCES += main.cpp\
     whatis2048.cpp \
     sound.cpp \
     data.cpp \
-    tile.cpp \
     gameview.cpp
 
 HEADERS  += mainwindow.h \
@@ -32,11 +31,9 @@ HEADERS  += mainwindow.h \
     whatis2048.h \
     sound.h \
     data.h \
-    tile.h \
     gameview.h
 
 FORMS    += mainwindow.ui \
-    dialog.ui \
     copyrightinformation.ui \
     settings.ui \
     howtoplay.ui \
