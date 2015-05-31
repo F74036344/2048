@@ -7,7 +7,6 @@
 #include <QMediaPlayer>
 
 //include windows
-#include "cusbutton.h"
 #include "settings.h"
 #include "copyrightinformation.h"
 #include "whatis2048.h"
@@ -75,7 +74,6 @@ private:
     QTimer *timer;
     Ui::MainWindow *ui;
     QGraphicsScene *mScene;
-    CusButton *mybutton;
     int colorCnt[]; //index:0=2  , index:1 = 0, index:2 = 4, index:3 = 8
 
 
