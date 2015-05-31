@@ -1294,7 +1294,7 @@ void GameView::on_pushButton_pause_clicked()
         //set game status label
         if(gameStatusLabel == NULL)
             gameStatusLabelCreator();
-        gameStatusLabel->setText("Pause\n（￣￢￣）. z Z ");
+        gameStatusLabel->setText("Paused\n（￣￢￣）. z Z ");
         gameStatusLabel->setStyleSheet("QLabel{background-color : QColor(0,0,0,60) ; color : yellow}");
         gameAreaScene->addWidget(gameStatusLabel);
 
