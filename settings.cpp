@@ -1,7 +1,8 @@
 #include "settings.h"
-#include "mainwindow.h"
 #include "ui_settings.h"
 
+class MainWindow;
+#include "mainwindow.h"
 extern MainWindow *w;
 
 settings::settings(QWidget *parent) :

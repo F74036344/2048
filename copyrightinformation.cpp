@@ -1,4 +1,3 @@
-
 #include "copyrightinformation.h"
 #include "ui_copyrightinformation.h"
 

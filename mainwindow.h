@@ -74,7 +74,7 @@ private:
     QTimer *timer;
     Ui::MainWindow *ui;
     QGraphicsScene *mScene;
-    int colorCnt[]; //index:0=2  , index:1 = 0, index:2 = 4, index:3 = 8
+    int *colorCnt; //index:0=2  , index:1 = 0, index:2 = 4, index:3 = 8
 
 
 };

@@ -1,15 +1,14 @@
 #include "gameview.h"
 #include "ui_gameview.h"
-#include "mainwindow.h"
+
 
 #include <QtGui>
 #include <QtCore>
 #include <QMessageBox>
 
-
-
+class MainWindow;
+#include "mainwindow.h"
 extern MainWindow *w;
-
 
 GameView::GameView(QWidget *parent) :
     QWidget(parent),
@@ -19,6 +18,7 @@ GameView::GameView(QWidget *parent) :
     qsrand(QTime::currentTime().msec());
 
     totalTileAmount = 0;
+    boardEdgeSize = w->data->getBoardEdgeSizeValue();
 
     timeLeft = w->data->getTimeLimitValue();
     if(w->data->isTimeLimitChecked() && timeLeft<=20)
@@ -38,7 +38,7 @@ GameView::GameView(QWidget *parent) :
     controlPanelHeight = 400;
 
     //Initialize the basic properties
-    boardEdgeSize = w->data->getBoardEdgeSizeValue();
+    // boardEdgeSize = w->data->getBoardEdgeSizeValue();
     gap = 5;
     tileEdgeLength = 80;
     gameAreaEdgeLength = (gap+tileEdgeLength)*(w->data->getBoardEdgeSizeValue())+gap;
@@ -95,8 +95,9 @@ GameView::GameView(QWidget *parent) :
         connect(timerForStopWatch,SIGNAL(timeout()),this,SLOT(oneTimeUnitPass()));
         timerForStopWatch->start(100);
     }
-    else
-        ui->label_timeValue->setText("∞");
+    else{
+        ui->label_timeValue->setText("N/A");
+    }
     ui->label_timeValue->setStyleSheet("QLabel{background-color : transparent ; color : green}");
     ui->label_timeValue->setAlignment(Qt::AlignCenter);
 
@@ -494,7 +495,8 @@ void GameView::generateTile()   //step 3
     //Initialize isThisIndexGenerateNewTile for step 4-2
     for(int i=0;i<power(boardEdgeSize,2);i++)
         *(isThisIndexGenerateNewTile+i) = false;
-    int ballot[power(boardEdgeSize,2)];
+    int squareBoardEdgeSize = power(boardEdgeSize,2);
+    int *ballot = new int[squareBoardEdgeSize];
     int current_index=0;
 
     //製籤
@@ -540,6 +542,9 @@ void GameView::generateTile()   //step 3
 
     qDebug() << "Step3:generateTile done";
             tileAniMove();    //step4
+
+    // recycle dynamically allocated resources
+    delete[] ballot;
 }
 
 

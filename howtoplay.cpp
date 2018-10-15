@@ -1,8 +1,9 @@
 #include <QMessageBox>
 #include "howtoplay.h"
 #include "ui_howtoplay.h"
-#include "mainwindow.h"
 
+class MainWindow;
+#include "mainwindow.h"
 extern MainWindow *w;
 
 howtoplay::howtoplay(QWidget *parent) :

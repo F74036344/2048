@@ -35,8 +35,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     //Initialize colorCnt;
-    for(int i=0;i<4;i++)
-        colorCnt[i] = 0;
+    colorCnt = new int[4];
+    for(int i=0;i<4;i++) colorCnt[i] = 0;
 
     //Initialize sound object
     sound = new Sound;
@@ -78,6 +78,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
+    delete[] colorCnt;
     delete ui;
 }
 

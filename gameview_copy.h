@@ -1,12 +1,16 @@
 #ifndef GAMEVIEW_H
 #define GAMEVIEW_H
 
+#include "mainwindow.h"
+
 #include <QLabel>
 #include <QWidget>
 #include <QGraphicsRectItem>
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QKeyEvent>
+
+extern MainWindow* w;
 
 namespace Ui {
 class GameView;
@@ -108,7 +112,7 @@ private:
     QLabel *gameStatusLabel;
     int controlPanelWidth,controlPanelHeight;
     int gameAreaPosX,gameAreaPosY;
-    int boardEdgeSize;
+    const int boardEdgeSize = w->data->getBoardEdgeSizeValue();
     int goal;
     int timeLeft;   //in second
     bool keyEventBlock;
